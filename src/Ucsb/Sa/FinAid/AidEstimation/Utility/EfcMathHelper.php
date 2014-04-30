@@ -19,6 +19,16 @@ class EfcMathHelper
             return 0;
         }
 
+        return EfcMathHelper::round($value);
+    }
+
+    /**
+     * Rounds a value appropriately for use in EFC calculations
+     * @param float $value Value to round
+     * @return float
+     */
+    public static function round($value)
+    {
         return round($value, 0, PHP_ROUND_HALF_UP);
     }
 } 
