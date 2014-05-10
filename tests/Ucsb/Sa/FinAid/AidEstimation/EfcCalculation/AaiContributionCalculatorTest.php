@@ -3,19 +3,15 @@ use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\AaiContributionCalculator;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\EfcCalculationRole;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Constants\AaiContributionCalculatorConstants;
 
-class AaiContributionCalculatorTest extends PHPUnit_Framework_TestCase
+require_once 'TestConstantsFactory.php';
+
+class AaiContributionCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     private $_aaiContributionCalculator;
 
     protected function setUp()
     {
-        $constants = new AaiContributionCalculatorConstants();
-
-        $constants->aaiContributionBases = array(0, 3366, 4341, 5472, 6798, 8358);
-        $constants->aaiContributionPercents = array(22, 25, 29, 34, 40, 47);
-        $constants->aaiContributionRanges = array(-3409, 15300, 19200, 23100, 27000, 30900);
-
-        $this->_aaiContributionCalculator = new AaiContributionCalculator($constants);
+        $this->_aaiContributionCalculator = new AaiContributionCalculator(TestConstantsFactory::getAaiContributionCalculatorConstants());
     }
 
     public function testCalculateContributionFromAai_Student_SameValue()

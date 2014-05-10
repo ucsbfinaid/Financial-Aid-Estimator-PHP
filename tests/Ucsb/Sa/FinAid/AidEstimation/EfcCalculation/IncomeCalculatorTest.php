@@ -1,17 +1,15 @@
 <?php
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\IncomeCalculator;
-use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Constants\IncomeCalculatorConstants;
 
-class IncomeCalculatorTest extends PHPUnit_Framework_TestCase
+require_once 'TestConstantsFactory.php';
+
+class IncomeCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     private $_incomeCalculator;
 
     public function setUp()
     {
-        $constants = new IncomeCalculatorConstants();
-        $constants->aiAssessmentPercent = 0.5;
-
-        $this->_incomeCalculator = new IncomeCalculator($constants);
+        $this->_incomeCalculator = new IncomeCalculator(TestConstantsFactory::getIncomeCalculatorConstants());
     }
 
     public function testCalculateAdjustedGrossIncome_Value_Calculated()

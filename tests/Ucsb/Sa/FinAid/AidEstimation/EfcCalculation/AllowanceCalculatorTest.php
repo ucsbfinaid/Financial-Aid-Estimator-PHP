@@ -1,72 +1,20 @@
 <?php
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\AllowanceCalculator;
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Constants\AllowanceCalculatorConstants;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\EfcCalculationRole;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\HouseholdMember;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\MaritalStatus;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\UnitedStatesStateOrTerritory;
-use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Constants\AllowanceCalculatorConstants;
 
-class AllowanceCalculatorTest extends PHPUnit_Framework_TestCase
+require_once 'TestConstantsFactory.php';
+
+class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
 {
 	private $_allowanceCalculator;
 
 	protected function setUp()
 	{
-		$constants = new AllowanceCalculatorConstants();
-
-		$constants->stateTaxAllowanceIncomeThreshold = 15000;
-
-        $constants->parentStateTaxAllowancePercents = array(
-            2, 3, 2, 2, 4, 4, 8, 2, 5, 8, 5, 7, 2, 3, 6, 2, 4, 5, 5, 4, 5, 5, 5, 3, 6, 2, 8,
-            7, 2, 5, 6, 3, 5, 5, 5, 3, 5, 9, 3, 9, 6, 3, 2, 6, 4, 7, 2, 5, 2, 7, 5, 2, 2, 3,
-            5, 6, 2, 6, 4, 3, 7, 2
-        );
-
-        $constants->studentStateTaxAllowancePercents = array(
-            2, 2, 0, 2, 2, 3, 5, 2, 3, 5, 3, 5, 2, 1, 3, 2, 3, 3, 2, 3, 3, 3, 4, 2, 4, 2, 6,
-            4, 2, 3, 4, 3, 3, 3, 3, 1, 1, 4, 2, 6, 4, 1, 2, 3, 3, 5, 2, 3, 2, 4, 3, 1, 1, 1,
-            3, 3, 2, 4, 1, 2, 4, 1
-        );
-
-        $constants->socialSecurityTaxIncomeThreshold = 110100;
-        $constants->socialSecurityLowPercent = 0.0765;
-        $constants->socialSecurityHighPercent = 0.0145;
-        $constants->socialSecurityHighBase = 8422.65;
-
-        $constants->employmentExpensePercent = 0.35;
-        $constants->employmentExpenseMaximum = 3900;
-
-        $constants->dependentParentIncomeProtectionAllowances = array(
-            array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 17100, 14170, 0, 0, 0 ),
-            array( 0, 21290, 18380, 15450, 0, 0 ),
-            array( 0, 26290, 23370, 20460, 17530, 0 ),
-            array( 0, 31020, 28100, 25190, 22260, 19350 ),
-            array( 0, 36290, 33360, 30450, 27530, 24620 )
-        );
-
-        $constants->independentWithDependentsIncomeProtectionAllowances = array(
-            array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 24150, 20020, 0, 0, 0 ),
-            array( 0, 30070, 25960, 21830, 0, 0 ),
-            array( 0, 37130, 33010, 28900, 24760, 0 ),
-            array( 0, 43810, 39670, 35570, 31450, 27340 ),
-            array( 0, 51230, 47110, 43020, 38870, 34770 )
-        );
-
-        $constants->dependentAdditionalStudentAllowance = 2910;
-        $constants->dependentAdditionalFamilyAllowance = 4100;
-
-        $constants->independentAdditionalStudentAllowance = 4110;
-        $constants->independentAdditionalFamilyAllowance = 5780;
-
-        $constants->dependentStudentIncomeProtectionAllowance = 6130;
-        $constants->singleIndependentWithoutDependentsIncomeProtectionAllowance = 9540;
-        $constants->marriedIndependentWithoutDependentsIncomeProtectionAllowance = 15290;
-
-        $this->_allowanceCalculator = new AllowanceCalculator($constants);
+        $this->_allowanceCalculator = new AllowanceCalculator(TestConstantsFactory::getAllowanceCalculatorConstants());
 	}
 
 	function testCalculateIncomeTaxAllowance_Value_Calculated()
