@@ -1,6 +1,8 @@
 <?php
 namespace Ucsb\Sa\FinAid\AidEstimation\EfcCalculation;
 
+use Ucsb\Sa\FinAid\AidEstimation\Utility\EfcMathHelper;
+
 /**
  * Expected Family Contribution (EFC) calculator
  * @package Ucsb\Sa\FinAid\AidEstimation\EfcCalculation
@@ -84,19 +86,19 @@ class EfcCalculator
                                         $args->parentAdjustedGrossIncome,
                                         $workIncome,
                                         $args->areParentsTaxFilers,
-                                        $args->ParentUntaxedIncomeAndBenefits,
-                                        $args->ParentAdditionalFinancialInfo);
+                                        $args->parentUntaxedIncomeAndBenefits,
+                                        $args->parentAdditionalFinancialInfo);
 
         // Parent's Total Allowances
         $parentTotalAllowances = $this->_allowanceCalculator->calculateTotalAllowances(
                                         EfcCalculationRole::Parent,
-                                        $args->MaritalStatus,
-                                        $args->StateOfResidency,
-                                        $args->NumberInCollege,
-                                        $args->NumberInHousehold,
+                                        $args->maritalStatus,
+                                        $args->stateOfResidency,
+                                        $args->numberInCollege,
+                                        $args->numberInHousehold,
                                         $parents,
                                         $parentTotalIncome,
-                                        $args->ParentIncomeTaxPaid);
+                                        $args->parentIncomeTaxPaid);
 
 		// Parent's Available Income
         $parentAvailableIncome = $this->_incomeCalculator->calculateAvailableIncome(
@@ -114,11 +116,11 @@ class EfcCalculator
         {
             $parentAssetContribution = $this->_assetContributionCalculator->calculateContributionFromAssets(
                 						EfcCalculationRole::Parent,
-						                $args->MaritalStatus,
-						                $args->OldestParentAge,
-						                $args->ParentCashSavingsChecking,
-						                $args->ParentInvestmentNetWorth,
-						                $args->ParentBusinessFarmNetWorth);
+						                $args->maritalStatus,
+						                $args->oldestParentAge,
+						                $args->parentCashSavingsChecking,
+						                $args->parentInvestmentNetWorth,
+						                $args->parentBusinessFarmNetWorth);
         }
 
         // Parent's Adjusted Available Income
@@ -135,13 +137,13 @@ class EfcCalculator
 
 
         // Modify Parent Contribution based on months of enrollment
-        if ($args->MonthsOfEnrollment < self::DefaultMonthsOfEnrollment)
+        if ($args->monthsOfEnrollment < self::DefaultMonthsOfEnrollment)
         {
             // LESS than default months of enrollment
             $parentMonthlyContribution = EfcMathHelper::round($parentContribution / self::DefaultMonthsOfEnrollment);
-            $parentContribution = EfcMathHelper::round($parentMonthlyContribution * $args->MonthsOfEnrollment);
+            $parentContribution = EfcMathHelper::round($parentMonthlyContribution * $args->monthsOfEnrollment);
         }
-        else if ($args->MonthsOfEnrollment > self::DefaultMonthsOfEnrollment)
+        else if ($args->monthsOfEnrollment > self::DefaultMonthsOfEnrollment)
         {
             // MORE than default months of enrollment
             $parentAltAai
@@ -151,7 +153,7 @@ class EfcCalculator
                 = $this->_aaiContributionCalculator->calculateContributionFromAai(EfcCalculationRole::Parent, $parentAltAai);
 
             $parentAltContribution
-                = EfcMathHelper::round($parentAltContributionFromAai / $args->NumberInCollege);
+                = EfcMathHelper::round($parentAltContributionFromAai / $args->numberInCollege);
 
             $parentContributionDiff
                 = ($parentAltContribution - $parentContribution);
@@ -160,7 +162,7 @@ class EfcCalculator
                 = EfcMathHelper::round($parentContributionDiff / self::AnnualMonthsOfEnrollment);
 
             $parentContributionAdjustment
-                = EfcMathHelper::round($parentMonthlyContribution * ($args->MonthsOfEnrollment - self::DefaultMonthsOfEnrollment));
+                = EfcMathHelper::round($parentMonthlyContribution * ($args->monthsOfEnrollment - self::DefaultMonthsOfEnrollment));
 
             $parentContribution += $parentContributionAdjustment;
         }
@@ -169,7 +171,7 @@ class EfcCalculator
         $studentTotalIncome = $this->_incomeCalculator->calculateTotalIncome(
                                         $args->studentAdjustedGrossIncome,
                                         $args->student->workIncome,
-                                        $args->IsStudentTaxFiler,
+                                        $args->isStudentTaxFiler,
                                         $args->studentUntaxedIncomeAndBenefits,
                                         $args->studentAdditionalFinancialInfo);
 
@@ -177,9 +179,9 @@ class EfcCalculator
         $studentTotalAllowances = $this->_allowanceCalculator->calculateTotalAllowances(
                                         EfcCalculationRole::DependentStudent,
                                         MaritalStatus::SingleSeparatedDivorced,
-                                        $args->StateOfResidency,
-                                        $args->NumberInCollege,
-                                        $args->NumberInHousehold,
+                                        $args->stateOfResidency,
+                                        $args->numberInCollege,
+                                        $args->numberInHousehold,
                                         array($args->student),
                                         $studentTotalIncome,
                                         $args->studentIncomeTaxPaid);
@@ -197,11 +199,11 @@ class EfcCalculator
             							$studentTotalAllowances);
 
         // Modify Student's Available Income based on months of enrollment
-        if ($args->MonthsOfEnrollment < self::DefaultMonthsOfEnrollment)
+        if ($args->monthsOfEnrollment < self::DefaultMonthsOfEnrollment)
         {
             // LESS than default months of enrollment
             $studentMonthlyContribution = EfcMathHelper::round($studentAvailableIncome / self::DefaultMonthsOfEnrollment);
-            $studentAvailableIncome = EfcMathHelper::round($studentMonthlyContribution * $args->MonthsOfEnrollment);
+            $studentAvailableIncome = EfcMathHelper::round($studentMonthlyContribution * $args->monthsOfEnrollment);
         }
 
 		// For MORE than default months of enrollment, the standard Available Income is used
@@ -239,14 +241,14 @@ class EfcCalculator
 	 */
 	public function getIndependentEfcProfile($args)
 	{
-        if ($args->NumberInCollege <= 0
-                || $args->MonthsOfEnrollment <= 0
+        if ($args->numberInCollege <= 0
+                || $args->monthsOfEnrollment <= 0
                 || $args->student == null)
         {
             return new EfcProfile(0, 0, 0, 0);
         }
 
-        $role = ($args->HasDependents)
+        $role = ($args->hasDependents)
                       ? EfcCalculationRole::IndependentStudentWithDependents
                       : EfcCalculationRole::IndependentStudentWithoutDependents;
 
@@ -262,10 +264,10 @@ class EfcCalculator
                 $workIncome += $args->spouse->workIncome;
             }
 
-            $householdMembers.Add($args->student);
+            $householdMembers[] = ($args->student);
         }
 
-        $simpleIncome = ($args->AreTaxFilers) ? $args->AdjustedGrossIncome : $workIncome;
+        $simpleIncome = ($args->areTaxFilers) ? $args->adjustedGrossIncome : $workIncome;
 
         // Determine Auto Zero EFC eligibility
         if ($args->isQualifiedForSimplified
@@ -277,25 +279,25 @@ class EfcCalculator
 
         // Student's Total Income
         $totalIncome = $this->_incomeCalculator->calculateTotalIncome(
-                                $args->AdjustedGrossIncome,
+                                $args->adjustedGrossIncome,
                                 $workIncome,
-                                $args->AreTaxFilers,
-                                $args->UntaxedIncomeAndBenefits,
-                                $args->AdditionalFinancialInfo);
+                                $args->areTaxFilers,
+                                $args->untaxedIncomeAndBenefits,
+                                $args->additionalFinancialInfo);
 
         // Student's Total Allowances
         $totalAllowances = $this->_allowanceCalculator->calculateTotalAllowances(
                                     $role,
-                                    $args->MaritalStatus,
-                                    $args->StateOfResidency,
-                                    $args->NumberInCollege,
-                                    $args->NumberInHousehold,
+                                    $args->maritalStatus,
+                                    $args->stateOfResidency,
+                                    $args->numberInCollege,
+                                    $args->numberInHousehold,
                                     $householdMembers,
                                     $totalIncome,
-                                    $args->IncomeTaxPaid);
+                                    $args->incomeTaxPaid);
 
         // Student's Available Income (Contribution from Available Income)
-        $availableIncome = $this->_incomeCalculator->calculateAvailableIncome(role, totalIncome, totalAllowances);
+        $availableIncome = $this->_incomeCalculator->calculateAvailableIncome($role, $totalIncome, $totalAllowances);
 
         // Determine Simplified EFC Equation Eligibility
         $useSimplified = ($args->isQualifiedForSimplified && $simpleIncome <= $this->_constants->SimplifiedEfcMax);
@@ -322,14 +324,14 @@ class EfcCalculator
             = $this->_aaiContributionCalculator->calculateContributionFromAai($role, $adjustedAvailableIncome);
 
         // Student's Contribution
-        $studentContribution = EfcMathHelper::round($studentContributionFromAai / $args->NumberInCollege);
+        $studentContribution = EfcMathHelper::round($studentContributionFromAai / $args->numberInCollege);
 
         // Modify Student's Available Income based on months of enrollment
-        if ($args->MonthsOfEnrollment < self::DefaultMonthsOfEnrollment)
+        if ($args->monthsOfEnrollment < self::DefaultMonthsOfEnrollment)
         {
             // LESS than default months of enrollment
             $monthlyContribution = EfcMathHelper::round(studentContribution / self::DefaultMonthsOfEnrollment);
-            $studentContribution = $monthlyContribution * $args->MonthsOfEnrollment;
+            $studentContribution = $monthlyContribution * $args->monthsOfEnrollment;
         }
 
         // For MORE than default months of enrollment, the standard contribution is used

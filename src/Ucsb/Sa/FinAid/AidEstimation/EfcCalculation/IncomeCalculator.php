@@ -96,7 +96,7 @@ class IncomeCalculator
 
         // The available income for Dependent Students and Independent Students Without Depends is
         // multiplied by an assessment percent
-        if (role == EfcCalculationRole::DependentStudent || role == EfcCalculationRole::IndependentStudentWithoutDependents)
+        if ($role == EfcCalculationRole::DependentStudent || $role == EfcCalculationRole::IndependentStudentWithoutDependents)
         {
             return $availableIncome < 0
                 ? 0 : EfcMathHelper::round($availableIncome * $this->_constants->aiAssessmentPercent);

@@ -90,7 +90,7 @@ class DependentEfcCalculatorArguments
 	 * Parent's total cash, savings, and checkings
 	 * @var float
 	 */
-	public $ParentCashSavingsChecking;
+	public $parentCashSavingsChecking;
 
 	/**
 	 * Parent's net worth of investments
@@ -108,19 +108,19 @@ class DependentEfcCalculatorArguments
 	 * Student's total cash, savings, and checking
 	 * @var float
 	 */
-	public $StudentCashSavingsChecking;
+	public $studentCashSavingsChecking;
 
 	/**
 	 * Student's net worth of investments
 	 * @var float
 	 */
-	public $StudentInvestmentNetWorth;
+	public $studentInvestmentNetWorth;
 
 	/**
 	 * Student's net worth of business and/or investment farm
 	 * @var float
 	 */
-	public $StudentBusinessFarmNetWorth;
+	public $studentBusinessFarmNetWorth;
 
 	/**
 	 * Parent's marital status
