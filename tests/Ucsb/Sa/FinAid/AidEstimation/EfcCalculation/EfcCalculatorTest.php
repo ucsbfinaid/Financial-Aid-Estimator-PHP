@@ -355,5 +355,434 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(299467, $profile->expectedFamilyContribution);
     }
 
+    public function testGetIndependentEfcProfile_HasDependentsLowValues_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+
+        $args->student->isWorking = false;
+        $args->student->workIncome = 0;
+
+        $args->spouse= new HouseholdMember();
+
+        $args->spouse->isWorking = false;
+        $args->spouse->workIncome = 0;
+
+        $args->adjustedGrossIncome = 0;
+        $args->areTaxFilers = false;
+        $args->incomeTaxPaid = 0;
+        $args->untaxedIncomeAndBenefits = 10000;
+        $args->additionalFinancialInfo = 0;
+        $args->cashSavingsCheckings = 0;
+        $args->investmentNetWorth = 0;
+        $args->businessFarmNetWorth = 0;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::AmericanSamoa;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->age = 25;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(0, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetIndependentEfcProfile_HasDependentsValues_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 60000;
+
+        $args->spouse = null;
+
+        $args->adjustedGrossIncome = 60000;
+        $args->areTaxFilers = true;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 1000;
+        $args->additionalFinancialInfo = 200;
+        $args->cashSavingsCheckings = 80000;
+        $args->investmentNetWorth = 5000;
+        $args->businessFarmNetWorth = 0;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alabama;
+        $args->numberInHousehold =  2;
+        $args->numberInCollege =  1;
+        $args->age = 25;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(6762, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetIndependentEfcProfile_HasDependentsHighValues_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 600000;
+
+        $args->spouse= new HouseholdMember();
+        $args->spouse->isWorking = true;
+        $args->spouse->workIncome = 600000;
+
+        $args->adjustedGrossIncome = 1200000;
+        $args->areTaxFilers = true;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 10000;
+        $args->additionalFinancialInfo = 2000;
+        $args->cashSavingsCheckings = 100000;
+        $args->investmentNetWorth = 8000;
+        $args->businessFarmNetWorth = 350000;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alaska;
+        $args->numberInHousehold =  20;
+        $args->numberInCollege =  10;
+        $args->age = 30;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(50052, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetDependentEfcProfile_SimplifiedHighAssets_Calculated()
+    {
+        $args = new DependentEfcCalculatorArguments();
+
+        $args->firstParent = new HouseholdMember();
+        $args->firstParent->isWorking = true;
+        $args->firstParent->workIncome = 25000;
+
+        $args->secondParent = new HouseholdMember();
+        $args->secondParent->isWorking = true;
+        $args->secondParent->workIncome = 24999;
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = false;
+        $args->student->workIncome = 0;
+
+        $args->parentAdjustedGrossIncome = 49999;
+        $args->areParentsTaxFilers = false;
+        $args->parentIncomeTaxPaid = 0;
+        $args->parentUntaxedIncomeAndBenefits = 0;
+        $args->parentAdditionalFinancialInfo = 0;
+        $args->studentAdjustedGrossIncome = 0;
+        $args->isStudentTaxFiler = false;
+        $args->studentIncomeTaxPaid = 0;
+        $args->studentUntaxedIncomeAndBenefits = 0;
+        $args->studentAdditionalFinancialInfo = 0;
+        $args->parentCashSavingsChecking = 123456789;
+        $args->parentInvestmentNetWorth = 123456789;
+        $args->parentBusinessFarmNetWorth = 123456789;
+        $args->studentCashSavingsChecking = 123456789;
+        $args->studentInvestmentNetWorth = 123456789;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::California;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->oldestParentAge = 30;
+        $args->isQualifiedForSimplified = true;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getDependentEfcProfile($args);
+        $this->assertEquals(3912, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetIndependentEfcProfile_SimplifiedHighAssets_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 25000;
+
+        $args->spouse= new HouseholdMember();
+        $args->spouse->isWorking = true;
+        $args->spouse->workIncome = 24999;
+
+        $args->adjustedGrossIncome = 49999;
+        $args->areTaxFilers = false;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 0;
+        $args->additionalFinancialInfo = 0;
+        $args->cashSavingsCheckings = 123456789;
+        $args->investmentNetWorth = 123456789;
+        $args->businessFarmNetWorth = 350000;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alaska;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->age = 30;
+        $args->isQualifiedForSimplified = true;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(1255, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetDependentEfcProfile_AutoZero_Calculated()
+    {
+        $args = new DependentEfcCalculatorArguments();
+
+        $args->firstParent = new HouseholdMember();
+        $args->firstParent->isWorking = true;
+        $args->firstParent->workIncome = 11500;
+
+        $args->secondParent = new HouseholdMember();
+        $args->secondParent->isWorking = true;
+        $args->secondParent->workIncome = 11500;
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = false;
+        $args->student->workIncome = 0;
+
+        $args->parentAdjustedGrossIncome = 32000;
+        $args->areParentsTaxFilers = false;
+        $args->parentIncomeTaxPaid = 0;
+        $args->parentUntaxedIncomeAndBenefits = 0;
+        $args->parentAdditionalFinancialInfo = 0;
+        $args->studentAdjustedGrossIncome = 0;
+        $args->isStudentTaxFiler = false;
+        $args->studentIncomeTaxPaid = 0;
+        $args->studentUntaxedIncomeAndBenefits = 0;
+        $args->studentAdditionalFinancialInfo = 0;
+        $args->parentCashSavingsChecking = 123456789;
+        $args->parentInvestmentNetWorth = 123456789;
+        $args->parentBusinessFarmNetWorth = 123456789;
+        $args->studentCashSavingsChecking = 123456789;
+        $args->studentInvestmentNetWorth = 123456789;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::California;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->oldestParentAge = 30;
+        $args->isQualifiedForSimplified = true;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getDependentEfcProfile($args);
+        $this->assertEquals(0, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetIndependentEfcProfile_AutoZero_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 11500;
+
+        $args->spouse= new HouseholdMember();
+        $args->spouse->isWorking = true;
+        $args->spouse->workIncome = 11500;
+
+        $args->adjustedGrossIncome = 32000;
+        $args->areTaxFilers = false;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 999999999999;
+        $args->additionalFinancialInfo = 0;
+        $args->cashSavingsCheckings = 123456789;
+        $args->investmentNetWorth = 123456789;
+        $args->businessFarmNetWorth = 350000;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alaska;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->age = 30;
+        $args->isQualifiedForSimplified = true;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(0, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetDependentEfcProfile_NoMonthsOfEnrollment_Calculated()
+    {
+        $args = new DependentEfcCalculatorArguments();
+
+        $args->firstParent = null;
+
+        $args->secondParent = new HouseholdMember();
+        $args->secondParent->isWorking = true;
+        $args->secondParent->workIncome = 60000;
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 10000;
+
+        $args->parentAdjustedGrossIncome = 60000;
+        $args->areParentsTaxFilers = true;
+        $args->parentIncomeTaxPaid = 6000;
+        $args->parentUntaxedIncomeAndBenefits = 1000;
+        $args->parentAdditionalFinancialInfo = 200;
+        $args->studentAdjustedGrossIncome = 10000;
+        $args->isStudentTaxFiler = true;
+        $args->studentIncomeTaxPaid = 1000;
+        $args->studentUntaxedIncomeAndBenefits = 0;
+        $args->studentAdditionalFinancialInfo = 0;
+        $args->parentCashSavingsChecking = 80000;
+        $args->parentInvestmentNetWorth = 5000;
+        $args->parentBusinessFarmNetWorth = 0;
+        $args->studentCashSavingsChecking = 3000;
+        $args->studentInvestmentNetWorth = 0;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::California;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->oldestParentAge = 45;
+        $args->monthsOfEnrollment = 0;
+
+        $profile = $this->_efcCalculator->getDependentEfcProfile($args);
+        $this->assertEquals(0, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetDependentEfcProfile_ThreeMonthsEnrollment_Calculated()
+    {
+        $args = new DependentEfcCalculatorArguments();
+
+        $args->firstParent = null;
+
+        $args->secondParent = new HouseholdMember();
+        $args->secondParent->isWorking = true;
+        $args->secondParent->workIncome = 60000;
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 10000;
+
+        $args->parentAdjustedGrossIncome = 60000;
+        $args->areParentsTaxFilers = true;
+        $args->parentIncomeTaxPaid = 6000;
+        $args->parentUntaxedIncomeAndBenefits = 1000;
+        $args->parentAdditionalFinancialInfo = 200;
+        $args->studentAdjustedGrossIncome = 10000;
+        $args->isStudentTaxFiler = true;
+        $args->studentIncomeTaxPaid = 1000;
+        $args->studentUntaxedIncomeAndBenefits = 0;
+        $args->studentAdditionalFinancialInfo = 0;
+        $args->parentCashSavingsChecking = 80000;
+        $args->parentInvestmentNetWorth = 5000;
+        $args->parentBusinessFarmNetWorth = 0;
+        $args->studentCashSavingsChecking = 3000;
+        $args->studentInvestmentNetWorth = 0;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::California;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->oldestParentAge = 45;
+        $args->monthsOfEnrollment = 3;
+
+        $profile = $this->_efcCalculator->getDependentEfcProfile($args);
+        $this->assertEquals(2625, $profile->parentContribution);
+        $this->assertEquals(867, $profile->studentContribution);
+    }
+
+    public function testGetDependentEfcProfile_TwelveMonthsEnrollment_Calculated()
+    {
+        $args = new DependentEfcCalculatorArguments();
+
+        $args->firstParent = null;
+
+        $args->secondParent = new HouseholdMember();
+        $args->secondParent->isWorking = true;
+        $args->secondParent->workIncome = 60000;
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 10000;
+
+        $args->parentAdjustedGrossIncome = 60000;
+        $args->areParentsTaxFilers = true;
+        $args->parentIncomeTaxPaid = 6000;
+        $args->parentUntaxedIncomeAndBenefits = 1000;
+        $args->parentAdditionalFinancialInfo = 200;
+        $args->studentAdjustedGrossIncome = 10000;
+        $args->isStudentTaxFiler = true;
+        $args->studentIncomeTaxPaid = 1000;
+        $args->studentUntaxedIncomeAndBenefits = 0;
+        $args->studentAdditionalFinancialInfo = 0;
+        $args->parentCashSavingsChecking = 80000;
+        $args->parentInvestmentNetWorth = 5000;
+        $args->parentBusinessFarmNetWorth = 0;
+        $args->studentCashSavingsChecking = 3000;
+        $args->studentInvestmentNetWorth = 0;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::California;
+        $args->numberInHousehold =  3;
+        $args->numberInCollege =  1;
+        $args->oldestParentAge = 45;
+        $args->monthsOfEnrollment = 12;
+
+        $profile = $this->_efcCalculator->getDependentEfcProfile($args);
+        $this->assertEquals(8409, $profile->parentContribution);
+        $this->assertEquals(1403, $profile->studentContribution);
+    }
+
+    public function testGetIndependentEfcProfile_NoMonthsOfEnrollment_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 60000;
+
+        $args->spouse= null;
+
+        $args->adjustedGrossIncome = 60000;
+        $args->areTaxFilers = true;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 1000;
+        $args->additionalFinancialInfo = 200;
+        $args->cashSavingsCheckings = 80000;
+        $args->investmentNetWorth = 5000;
+        $args->businessFarmNetWorth = 0;
+        $args->hasDependents = false;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alabama;
+        $args->numberInHousehold =  1;
+        $args->numberInCollege =  1;
+        $args->age = 25;
+        $args->monthsOfEnrollment = 0;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(0, $profile->expectedFamilyContribution);
+    }
+
+    public function testGetIndependentEfcProfile_ThreeMonthsEnrollment_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 60000;
+
+        $args->spouse= null;
+
+        $args->adjustedGrossIncome = 60000;
+        $args->areTaxFilers = true;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 1000;
+        $args->additionalFinancialInfo = 200;
+        $args->cashSavingsCheckings = 80000;
+        $args->investmentNetWorth = 5000;
+        $args->businessFarmNetWorth = 0;
+        $args->hasDependents = false;
+        $args->maritalStatus = MaritalStatus::SingleSeparatedDivorced;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alabama;
+        $args->numberInHousehold =  1;
+        $args->numberInCollege =  1;
+        $args->age = 25;
+        $args->monthsOfEnrollment = 3;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(12243, $profile->expectedFamilyContribution);
+    }
 }
 ?>

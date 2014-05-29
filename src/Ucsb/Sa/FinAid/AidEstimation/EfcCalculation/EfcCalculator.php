@@ -147,7 +147,7 @@ class EfcCalculator
         {
             // MORE than default months of enrollment
             $parentAltAai
-                = $parentAdjustedAvailableIncome + $this->_constants->AltEnrollmentIncomeProtectionAllowance;
+                = $parentAdjustedAvailableIncome + $this->_constants->altEnrollmentIncomeProtectionAllowance;
 
             $parentAltContributionFromAai
                 = $this->_aaiContributionCalculator->calculateContributionFromAai(EfcCalculationRole::Parent, $parentAltAai);
@@ -272,7 +272,7 @@ class EfcCalculator
         // Determine Auto Zero EFC eligibility
         if ($args->isQualifiedForSimplified
             && $role == EfcCalculationRole::IndependentStudentWithDependents
-            && $simpleIncome <= $this->_constants->AutoZeroEfcMax)
+            && $simpleIncome <= $this->_constants->autoZeroEfcMax)
         {
             return new EfcProfile(0, 0, 0, 0);
         }
@@ -300,7 +300,7 @@ class EfcCalculator
         $availableIncome = $this->_incomeCalculator->calculateAvailableIncome($role, $totalIncome, $totalAllowances);
 
         // Determine Simplified EFC Equation Eligibility
-        $useSimplified = ($args->isQualifiedForSimplified && $simpleIncome <= $this->_constants->SimplifiedEfcMax);
+        $useSimplified = ($args->isQualifiedForSimplified && $simpleIncome <= $this->_constants->simplifiedEfcMax);
 
         // Student's Contribution From Assets
         $assetContribution = 0;
@@ -330,7 +330,7 @@ class EfcCalculator
         if ($args->monthsOfEnrollment < self::DefaultMonthsOfEnrollment)
         {
             // LESS than default months of enrollment
-            $monthlyContribution = EfcMathHelper::round(studentContribution / self::DefaultMonthsOfEnrollment);
+            $monthlyContribution = EfcMathHelper::round($studentContribution / self::DefaultMonthsOfEnrollment);
             $studentContribution = $monthlyContribution * $args->monthsOfEnrollment;
         }
 
