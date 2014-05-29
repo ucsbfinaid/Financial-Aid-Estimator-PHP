@@ -689,6 +689,453 @@ class AidEstimationValidator
         $parsedArgs->monthsOfEnrollment = $monthsOfEnrollment;
 
         return $parsedArgs;
-    } 
+    }
+
+    /**
+     * Parses "raw" string values into a DependentEfcCalculatorArguments object that
+     * can be passed to the EfcCalculator. If validation errors occur while parsing the values,
+     * they are added to the errors property of this validator
+     * @param RawSimpleDependentEfcCalculatorArguments $args Set of "raw" string arguments to parse
+     * @return DependentEfcCalculatorArguments
+     */
+    public function validateSimpleDependentEfcCalculatorArguments($args)
+    {
+        if ($args == null)
+        {
+            throw new Exception("No raw arguments provided");
+        }
+
+        // Marital Status
+        $maritalStatus = 
+            $this->_validator->validateMaritalStatus(
+                $args->maritalStatus,
+                self::LabelParentMaritalStatus,
+                self::ParamMaritalStatus);
+
+        // Parent Income
+        $parentIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                    $args->parentIncome,
+                    self::LabelParentIncome,
+                    self::ParamParentIncome);
+
+        // Parent Other Income
+        $parentOtherIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                    $args->parentOtherIncome,
+                    self::LabelParentOtherIncome,
+                    self::ParamParentOtherIncome);
+
+        // Parent Income Earned By
+        $incomeEarnedBy =
+            $this->_validator->validateIncomeEarnedBy(
+                $args->parentIncomeEarnedBy,
+                self::LabelParentIncomeEarnedBy,
+                self::ParamParentIncomeEarnedBy);
+
+        // CHECK: If Single/Separated/Divorced, "Parent Income Earned By" can not be "Both"
+        if ($maritalStatus == MaritalStatus::SingleSeparatedDivorced && incomeEarnedBy == IncomeEarnedBy::Both)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamParentIncomeEarnedBy,
+                sprintf('%s was "Single/Separated/Divorced", but %s was marked as earned by both parents',
+                self::LabelParentMaritalStatus, self::LabelParentIncomeEarnedBy)));
+        }
+
+        // CHECK: If "Parent Income Earned By" is "None', then "Parent Income" must be 0
+        if ($incomeEarnedBy == IncomeEarnedBy::None && $parentIncome > 0)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamParentIncome,
+                sprintf('%s was marked as earned by neither parents, but %s was greater than 0',
+                    self::LabelParentIncomeEarnedBy, self::LabelParentIncome)));
+        }
+
+        // Parent Income Tax Paid
+        $parentIncomeTaxPaid =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->parentIncomeTax,
+                self::LabelParentIncomeTax,
+                self::ParamParentIncomeTax);
+
+        // Parent Assets
+        $parentAssets =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->parentAssets,
+                self::LabelParentAssets,
+                self::ParamParentAssets);
+
+        // Student Income
+        $studentIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentIncome,
+                self::LabelStudentIncome,
+                self::ParamStudentIncome);
+
+        // Student Other Income
+        $studentOtherIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentOtherIncome,
+                self::LabelStudentOtherIncome,
+                self::ParamStudentOtherIncome);
+
+        // Student Income Tax Paid
+        $studentIncomeTaxPaid =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentIncomeTax,
+                self::LabelStudentIncomeTax,
+                self::ParamStudentIncomeTax);
+
+        // Student Assets
+        $studentAssets =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentAssets,
+                self::LabelStudentAssets,
+                self::ParamStudentAssets);
+
+        // Number in Household
+        $numberInHousehold =
+            $this->_validator->validateNonZeroInteger(
+                $args->numberInHousehold,
+                self::LabelNumInHousehold,
+                self::ParamNumInHousehold);
+
+        // Number in College
+        $numberInCollege =
+            $this->_validator->validateNonZeroInteger(
+                $args->numberInCollege,
+                self::LabelNumInCollege,
+                self::ParamNumInCollege);
+
+        // CHECK: Number in Household must be greater than or equal to Number in College
+        if ($numberInCollege > $numberInHousehold)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamNumInCollege,
+                sprintf('%s must be less than or equal to %s',
+                self::LabelNumInCollege, self::LabelNumInHousehold)));
+        }
+
+        // State of Residency
+        $stateOfResidency =
+            $this->_validator->validateUnitedStatesStateOrTerritory(
+                $args->stateOfResidency,
+                self::LabelStateOfResidency,
+                self::ParamStateOfResidency);
+
+        if (count($this->_validator->errors) > 0)
+        {
+            return null;
+        }
+
+        // Build a list of arguments for the full EFC calculation using assumed
+        // values gleaned from the "simplified" values provided
+
+        $isFirstParentWorking = false;
+        $isSecondParentWorking = false;
+
+        $firstParentWorkIncome = 0;
+        $secondParentWorkIncome = 0;
+
+        if ($incomeEarnedBy == IncomeEarnedBy::One)
+        {
+            $isFirstParentWorking = true;
+            $firstParentWorkIncome = $parentIncome;
+        }
+
+        if ($incomeEarnedBy == IncomeEarnedBy::Both)
+        {
+            $isFirstParentWorking = $isSecondParentWorking = true;
+            $firstParentWorkIncome = $secondParentWorkIncome = ($parentIncome / 2);
+        }
+
+        $firstParent = new HouseholdMember();
+        $firstParent->isWorking = $isFirstParentWorking;
+        $firstParent->workIncome = $firstParentWorkIncome;
+
+        $secondParent = null;
+        if ($maritalStatus == MaritalStatus::MarriedRemarried)
+        {
+            $secondParent = new HouseholdMember();
+            $secondParent->isWorking = $isSecondParentWorking;
+            $secondParent->workIncome = $secondParentWorkIncome;
+        }
+
+        // ASSUME: Student is working
+        $student = new HouseholdMember();
+        $student->isWorking = true;
+        $student->workIncome = $studentIncome;
+
+        // Build calculation arguments
+        $parsedArgs = new DependentEfcCalculatorArguments();
+
+        $parsedArgs->firstParent = $firstParent;
+        $parsedArgs->secondParent = $secondParent;
+        $parsedArgs->student = $student;
+
+        // ASSUME: "Age of Oldest Parent" is 45
+        $parsedArgs->oldestParentAge = 45;
+
+        // ASSUME: "Parent's AGI" == "Parent's Income"
+        $parsedArgs->parentAdjustedGrossIncome = $parentIncome;
+
+        // ASSUME: Parents are tax filers
+        $parsedArgs->areParentsTaxFilers = true;
+
+        $parsedArgs->parentIncomeTaxPaid = $parentIncomeTaxPaid;
+
+        // ASSUME: "Parent's Untaxed Income and Benefits" == "Parent's Other Income"
+        $parsedArgs->parentUntaxedIncomeAndBenefits = $parentOtherIncome;
+
+        // ASSUME: "Parent's Additional Financial Information" is zero
+        $parsedArgs->parentAdditionalFinancialInfo = 0;
+
+        // ASSUME: "Student's AGI" == "Student's Income"
+        $parsedArgs->studentAdjustedGrossIncome = $studentIncome;
+
+        // ASSUME: Student is a tax filer
+        $parsedArgs->isStudentTaxFiler = true;
+
+        $parsedArgs->studentIncomeTaxPaid = $studentIncomeTaxPaid;
+
+        // ASSUME: "Student's Untaxed Income and Benefits" == "Student's Other Income"
+        $parsedArgs->studentUntaxedIncomeAndBenefits = $studentOtherIncome;
+
+        // ASSUME: "Student's Additional Financial Information" is zero
+        $parsedArgs->studentAdditionalFinancialInfo = 0;
+
+        // ASSUME: "Parent's Cash, Savings, and Checking" == "Parent's Assets"
+        $parsedArgs->parentCashSavingsChecking = $parentAssets;
+
+        // ASSUME: "Parent's Net Worth of Investments" is zero
+        $parsedArgs->parentInvestmentNetWorth = 0;
+
+        // ASSUME: "Parent's Net Worth of Business and/or Investment Farm" is zero
+        $parsedArgs->parentBusinessFarmNetWorth = 0;
+
+        // ASSUME: "Student's Cash, Savings, and Checking" == "Student's Assets"
+        $parsedArgs->studentCashSavingsChecking = $studentAssets;
+
+        // ASSUME: "Student's Net Worth of Investments" is zero
+        $parsedArgs->studentInvestmentNetWorth = 0;
+
+        // ASSUME: "Student's Net Worth of Business and/or Investment Farm" is zero
+        $parsedArgs->studentBusinessFarmNetWorth = 0;
+
+        $parsedArgs->maritalStatus = $maritalStatus;
+        $parsedArgs->stateOfResidency = $stateOfResidency;
+        $parsedArgs->numberInHousehold = $numberInHousehold;
+        $parsedArgs->numberInCollege = $numberInCollege;
+
+        // ASSUME: Student is NOT qualified for simplified formula
+        $parsedArgs->isQualifiedForSimplified = false;
+
+        // ASSUME: Nine months of enrollment
+        $parsedArgs->monthsOfEnrollment = 9;
+
+        return $parsedArgs;
+    }
+
+    /**
+     * Parses "raw" string values into a IndependentEfcCalculatorArguments object that
+     * can be passed to the EfcCalculator. If validation errors occur while parsing the values,
+     * they are added to the errors property of this validator
+     * @param RawSimpleIndependentEfcCalculatorArguments $args Set of "raw" string arguments to parse
+     * @return IndependentEfcCalculatorArguments
+     */
+    public function validateSimpleIndependentEfcCalculatorArguments($args)
+    {
+        if ($args == null)
+        {
+            throw new Exception("No raw arguments provided");
+        }
+
+        // Marital Status
+        $maritalStatus
+            = $this->_validator->validateMaritalStatus(
+                $args->maritalStatus,
+                self::LabelIndStudentMaritalStatus,
+                self::ParamMaritalStatus);
+
+        // Student Age
+        $studentAge =
+            $this->_validator->validateNonZeroInteger(
+                $args->studentAge,
+                self::LabelIndStudentAge,
+                self::ParamIndStudentAge);
+
+        // Student Income
+        $studentIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentIncome,
+                self::LabelIndStudentIncome,
+                self::ParamIndStudentIncome);
+
+        // Student Other Income
+        $studentOtherIncome =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentOtherIncome,
+                self::LabelIndStudentOtherIncome,
+                self::ParamIndStudentOtherIncome);
+
+        // Student Income Earned By
+        $incomeEarnedBy =
+            $this->_validator->validateIncomeEarnedBy(
+                $args->studentIncomeEarnedBy,
+                self::LabelIndStudentIncomeEarnedBy,
+                self::ParamIndStudentIncomeEarnedBy);
+
+        // CHECK: If Single/Separated/Divorced, "Student's Income Earned By" can not be "Both"
+        if ($maritalStatus == MaritalStatus::SingleSeparatedDivorced && $incomeEarnedBy == IncomeEarnedBy::Both)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamIndStudentIncomeEarnedBy,
+                sprintf('%s was "Single/Separated/Divorced", but %s was marked as earned by both student and spouse',
+                self::LabelIndStudentMaritalStatus, self::LabelIndStudentIncomeEarnedBy)));
+        }
+
+        // CHECK: If "Student's Income Earned By" is "None', then "Parent Income" must be 0
+        if ($incomeEarnedBy == IncomeEarnedBy::None && $studentIncome > 0)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamParentIncome,
+                sprintf('%s was marked as earned by neither student nor spouse, but %s was greater than 0',
+                    self::LabelIndStudentIncomeEarnedBy, self::LabelIndStudentIncome)));
+        }
+
+        // Student Income Tax Paid
+        $studentIncomeTaxPaid =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentIncomeTax,
+                self::LabelIndStudentIncomeTax,
+                self::ParamIndStudentIncomeTax);
+
+        // Student Assets
+        $studentAssets =
+            $this->_validator->validatePositiveMoneyValue(
+                $args->studentAssets,
+                self::LabelIndStudentAssets,
+                self::ParamIndStudentAssets);
+
+        // Number in Household
+        $numberInHousehold =
+            $this->_validator->validateNonZeroInteger(
+                $args->numberInHousehold,
+                self::LabelNumInHousehold,
+                self::ParamNumInHousehold);
+
+        // Number in College
+        $numberInCollege =
+            $this->_validator->validateNonZeroInteger(
+                $args->numberInCollege,
+                self::LabelNumInCollege,
+                self::ParamNumInCollege);
+
+        // CHECK: Number in Household must be greater than or equal to Number in College
+        if ($numberInCollege > $numberInHousehold)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamNumInCollege,
+                sprintf('%s must be less than or equal to %s',
+                self::LabelNumInCollege, self::LabelNumInHousehold)));
+        }
+
+        // Has Dependents
+        $hasDependents =
+            $this->_validator->validateBoolean(
+                $args->HasDependents,
+                self::LabelIndStudentHasDep,
+                self::ParamIndStudentHasDep);
+
+        // CHECK: If student has dependents, Number in Household can not be less than two
+        if ($hasDependents && $numberInHousehold < 2)
+        {
+            $this->_validator->errors[] = new ValidationError(self::ParamIndStudentHasDep,
+                sprintf('Student has dependents, but %s was less than two.',
+                self::LabelNumInHousehold)));
+        }
+
+        // State of Residency
+        $stateOfResidency =
+            $this->_validator->validateUnitedStatesStateOrTerritory(
+                $args->stateOfResidency, 
+                self::LabelStateOfResidency,
+                self::ParamStateOfResidency);
+
+        if (count($this->_validator->errors) > 0)
+        {
+            return null;
+        }
+
+        // Build a list of arguments for the full EFC calculation using assumed
+        // values gleaned from the "simplified" values provided
+
+        $isStudentWorking = false;
+        $isSpouseWorking = false;
+
+        $studentWorkIncome = 0;
+        $spouseWorkIncome = 0;
+
+        if($incomeEarnedBy == IncomeEarnedBy::One)
+        {
+            $isStudentWorking = true;
+            $studentWorkIncome = $studentIncome;
+        }
+
+        if($incomeEarnedBy == IncomeEarnedBy::Both)
+        {
+            $isStudentWorking = $isSpouseWorking = true;
+            $studentWorkIncome = $spouseWorkIncome = ($studentIncome/2);
+        }
+
+        $student = new HouseholdMember();
+        $student->isWorking = $isStudentWorking;
+        $student->workIncome = $studentWorkIncome;
+
+        $spouse = null;
+        if ($maritalStatus == MaritalStatus::MarriedRemarried)
+        {
+            $spouse = new HouseholdMember();
+            $spouse->isWorking = $isSpouseWorking;
+            $spouse->workIncome = $spouseWorkIncome;
+        }
+
+        $parsedArgs = new IndependentEfcCalculatorArguments();
+
+        $parsedArgs->student = $student;
+        $parsedArgs->spouse = $spouse;
+
+        // ASSUME: "Student and Spouse's Income" == "Student and Spouse's AGI"
+        $parsedArgs->adjustedGrossIncome = $studentIncome;
+
+        // ASSUME: Student and Spouse are tax filers
+        $parsedArgs->areTaxFilers = true;
+
+        $parsedArgs->incomeTaxPaid = $studentIncomeTaxPaid;
+
+        // ASSUME: "Student and Spouse's Untaxed Income and Benefits" == "Student and Spouse's Other Income"
+        $parsedArgs->untaxedIncomeAndBenefits = $studentOtherIncome;
+
+        // ASSUME: "Student and Spouse's Additional Financial Information" is zero
+        $parsedArgs->additionalFinancialInfo = 0;
+
+        // ASSUME: "Student's and Spouse's Cash, Savings, and Checking" == "Student and Spouse's Assets"
+        $parsedArgs->cashSavingsCheckings = $studentAssets;
+
+        // ASSUME: "Student and Spouse's Net Worth of Investments" is zero
+        $parsedArgs->investmentNetWorth = 0;
+
+        // ASSUME: "Student and Spouse's Net Worth of Business and/or Investment Farm" is zero
+        $parsedArgs->businessFarmNetWorth = 0;
+
+        $parsedArgs->hasDependents = $hasDependents;
+        $parsedArgs->maritalStatus = $maritalStatus;
+        $parsedArgs->stateOfResidency = $stateOfResidency;
+        $parsedArgs->numberInHousehold = $numberInHousehold;
+        $parsedArgs->numberInCollege = $numberInCollege;
+        $parsedArgs->age = $studentAge;
+
+        // ASSUME: Student is NOT qualified for simplified formula
+        $parsedArgs->isQualifiedForSimplified = false;
+
+        // ASSUME: Nine months of enrollment
+        $parsedArgs->monthsOfEnrollment = 9;
+
+        return $parsedArgs;
+    }
 }
 ?>
