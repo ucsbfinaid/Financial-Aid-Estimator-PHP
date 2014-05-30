@@ -3,10 +3,16 @@
 Open-source PHP Financial Aid Estimator, including an implementation of the Federal Expected Family Contribution
 (EFC) formula.
 
+To get started, read the
+[Getting Started guide](https://github.com/ucsbfinaid/Financial-Aid-Estimator-PHP/wiki/Getting-Started).
+
 Given the variation in how each university calculates financial aid eligibility, this project does not directly
 include logic for estimating financial aid at a particular university. Instead, the PHP Financial Aid Estimator
 provides tools to _support_ creating a financial aid estimator specific to each institution's financial aid
 methodology.
+
+For more information about the features and capabilities of this project, read the
+[wiki documentation](https://github.com/ucsbfinaid/Financial-Aid-Estimator-PHP/wiki).
 
 ## Copyright
 
