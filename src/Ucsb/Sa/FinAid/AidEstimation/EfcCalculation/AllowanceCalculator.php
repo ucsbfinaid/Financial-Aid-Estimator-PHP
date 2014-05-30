@@ -88,6 +88,11 @@ class AllowanceCalculator
 	 */
 	public function calculateStateTaxAllowance($role, $stateOfResidency, $totalIncome)
 	{
+		if(!$stateOfResidency)
+		{
+			$stateOfResidency = UnitedStatesStateOrTerritory::Other;
+		}
+
 		$stateTaxAllowance = 0;
 
 		$stateTaxAllowanceIncomeThreshold = $this->_constants->stateTaxAllowanceIncomeThreshold;
