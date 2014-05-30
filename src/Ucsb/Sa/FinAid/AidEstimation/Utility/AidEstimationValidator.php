@@ -4,6 +4,7 @@ namespace Ucsb\Sa\FinAid\AidEstimation\Utility;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Arguments\DependentEfcCalculatorArguments;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Arguments\IndependentEfcCalculatorArguments;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\HouseholdMember;
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\IncomeEarnedBy;
 use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\MaritalStatus;
 use Ucsb\Sa\FinAid\AidEstimation\Utility\ArgumentValidator;
 
