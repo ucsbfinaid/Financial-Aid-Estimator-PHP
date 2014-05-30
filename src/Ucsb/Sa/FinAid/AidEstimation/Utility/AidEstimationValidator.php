@@ -1,8 +1,16 @@
 <?php
 namespace Ucsb\Sa\FinAid\AidEstimation\Utility;
 
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Arguments\DependentEfcCalculatorArguments;
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\Arguments\IndependentEfcCalculatorArguments;
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\HouseholdMember;
+use Ucsb\Sa\FinAid\AidEstimation\EfcCalculation\MaritalStatus;
+use Ucsb\Sa\FinAid\AidEstimation\Utility\ArgumentValidator;
+
 class AidEstimationValidator
 {
+    private $_validator;
+
     // Is Working?
 
     const LabelIsFirstParentWorking = '"Did the First Parent Work?"';
@@ -104,9 +112,9 @@ class AidEstimationValidator
 
     // Marital Status
 
-    const Param$= "maritalStatus";
-    const LabelParent$= '"Parent(s)\' Marital Status"';
-    const LabelIndStudent$= '"Student\'s Marital Status"';
+    const ParamMaritalStatus = "maritalStatus";
+    const LabelParentMaritalStatus = '"Parent(s)\' Marital Status"';
+    const LabelIndStudentMaritalStatus = '"Student\'s Marital Status"';
 
     // State of Residency
 
@@ -175,6 +183,21 @@ class AidEstimationValidator
     const ParamParentAssets = "parentAssets";
     const ParamStudentAssets = "studentAssets";
     const ParamIndStudentAssets = "studentAssets";
+
+    public function __construct()
+    {
+        $this->_validator = new ArgumentValidator();
+    }
+
+    public function hasErrors()
+    {
+        return (count($this->_validator->errors) > 0);
+    }
+
+    public function getErrors()
+    {
+        return $this->_validator->errors;
+    }
 
     /**
      * Parses "raw" string values into a DependentEfcCalculatorArguments object that
@@ -265,8 +288,8 @@ class AidEstimationValidator
                   : 0;
 
         $student = new HouseholdMember();
-        $student->isWorking = isStudentWorking;
-        $student->workIncome = studentWorkIncome;
+        $student->isWorking = $isStudentWorking;
+        $student->workIncome = $studentWorkIncome;
 
         // Parent AGI
         $parentAgi
@@ -422,7 +445,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamNumInCollege,
                 sprintf('%s must be less than or equal to %s',
-                self::LabelNumInCollege, self::LabelNumInHousehold)));
+                self::LabelNumInCollege, self::LabelNumInHousehold));
         }
 
         // Is Qualified For Simplified?
@@ -645,7 +668,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamIndStudentHasDep,
                 sprintf('Student has dependents, but %s was less than two.',
-                self::LabelNumInHousehold)));
+                self::LabelNumInHousehold));
         }
 
         // Is Qualified for Simplified
@@ -738,7 +761,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamParentIncomeEarnedBy,
                 sprintf('%s was "Single/Separated/Divorced", but %s was marked as earned by both parents',
-                self::LabelParentMaritalStatus, self::LabelParentIncomeEarnedBy)));
+                self::LabelParentMaritalStatus, self::LabelParentIncomeEarnedBy));
         }
 
         // CHECK: If "Parent Income Earned By" is "None', then "Parent Income" must be 0
@@ -746,7 +769,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamParentIncome,
                 sprintf('%s was marked as earned by neither parents, but %s was greater than 0',
-                    self::LabelParentIncomeEarnedBy, self::LabelParentIncome)));
+                    self::LabelParentIncomeEarnedBy, self::LabelParentIncome));
         }
 
         // Parent Income Tax Paid
@@ -810,7 +833,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamNumInCollege,
                 sprintf('%s must be less than or equal to %s',
-                self::LabelNumInCollege, self::LabelNumInHousehold)));
+                self::LabelNumInCollege, self::LabelNumInHousehold));
         }
 
         // State of Residency
@@ -987,7 +1010,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamIndStudentIncomeEarnedBy,
                 sprintf('%s was "Single/Separated/Divorced", but %s was marked as earned by both student and spouse',
-                self::LabelIndStudentMaritalStatus, self::LabelIndStudentIncomeEarnedBy)));
+                self::LabelIndStudentMaritalStatus, self::LabelIndStudentIncomeEarnedBy));
         }
 
         // CHECK: If "Student's Income Earned By" is "None', then "Parent Income" must be 0
@@ -995,7 +1018,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamParentIncome,
                 sprintf('%s was marked as earned by neither student nor spouse, but %s was greater than 0',
-                    self::LabelIndStudentIncomeEarnedBy, self::LabelIndStudentIncome)));
+                    self::LabelIndStudentIncomeEarnedBy, self::LabelIndStudentIncome));
         }
 
         // Student Income Tax Paid
@@ -1031,7 +1054,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamNumInCollege,
                 sprintf('%s must be less than or equal to %s',
-                self::LabelNumInCollege, self::LabelNumInHousehold)));
+                self::LabelNumInCollege, self::LabelNumInHousehold));
         }
 
         // Has Dependents
@@ -1046,7 +1069,7 @@ class AidEstimationValidator
         {
             $this->_validator->errors[] = new ValidationError(self::ParamIndStudentHasDep,
                 sprintf('Student has dependents, but %s was less than two.',
-                self::LabelNumInHousehold)));
+                self::LabelNumInHousehold));
         }
 
         // State of Residency

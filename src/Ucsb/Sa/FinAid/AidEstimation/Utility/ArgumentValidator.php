@@ -33,7 +33,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null)
+        if ($input === null)
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return false; // Stop validation
@@ -42,7 +42,7 @@ class ArgumentValidator
         // Parsing
 		$value = filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
-        if ($value == null)
+        if ($value === null)
         {
             $this->errors[] = $this->getConversionError($inputDisplayName, $inputParameterName);
             return false;
@@ -65,7 +65,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -74,7 +74,7 @@ class ArgumentValidator
         // Parsing
 		$value = filter_var($input, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
 
-        if ($value == null)
+        if ($value === null)
         {
             $this->errors[] = $this->getConversionError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -111,7 +111,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -120,7 +120,7 @@ class ArgumentValidator
         // Parsing
 		$value = filter_var($input, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
 
-        if ($value == null)
+        if ($value === null)
         {
             $this->errors[] = $this->getConversionError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -157,7 +157,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -166,7 +166,7 @@ class ArgumentValidator
         // Parsing
 		$value = filter_var($input, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
-        if ($value == null)
+        if ($value === null)
         {
             $this->errors[] = $this->getConversionError($inputDisplayName, $inputParameterName);
             return 0; // Stop validation
@@ -195,7 +195,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return MaritalStatus::None; // Stop validation
@@ -232,7 +232,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return UnitedStatesStateOrTerritory::Other;
@@ -449,7 +449,7 @@ class ArgumentValidator
         $this->validateInputInfo($inputDisplayName, $inputParameterName);
 
         // Provided?
-        if ($input == null || trim($input) == '')
+        if ($input === null || trim($input) === '')
         {
             $this->errors[] = $this->getNoValueError($inputDisplayName, $inputParameterName);
             return IncomeEarnedBy::None;
@@ -507,7 +507,7 @@ class ArgumentValidator
 
     private function getError($errorMessage, $inputDisplayName, $inputParameterName)
     {
-        if ($errorMessage == null || trim($errorMessage) == '')
+        if ($errorMessage === null || trim($errorMessage) === '')
         {
             throw new \Exception("No error message provided");
         }
@@ -519,12 +519,12 @@ class ArgumentValidator
 
     private function validateInputInfo($inputDisplayName, $inputParameterName)
     {
-        if ($inputDisplayName == null || trim($inputDisplayName) == '')
+        if ($inputDisplayName === null || trim($inputDisplayName) === '')
         {
             throw new \Exception("No input display name provided");
         }
 
-        if ($inputParameterName == null || trim($inputParameterName) == '')
+        if ($inputParameterName === null || trim($inputParameterName) === '')
         {
             throw new \Exception("No input parameter name provided");
         }
