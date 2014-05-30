@@ -25,7 +25,7 @@ class AwardRange
      * If this function is only called with a "value" and "lowerBuffer", "upperBuffer" will
      * be set equal to "lowerBuffer".
      */
-    public static function GetRangeFromValue($value, $lowerBuffer, $upperBuffer = -1, $minimumAwardValue = 0)
+    public static function getRangeFromValue($value, $lowerBuffer, $upperBuffer = -1, $minimumAwardValue = 0)
     {
         $formattedLowerBuffer = 0;
         $formattedUpperBuffer = 0;

@@ -39,14 +39,14 @@ class AwardRangeTest extends PHPUnit_Framework_TestCase
 
     public function testGetRangeFromValue_SingleValidBuffer_CreatesRange()
     {
-        $range = AwardRange::GetRangeFromValue(500, 100);
+        $range = AwardRange::getRangeFromValue(500, 100);
         $this->assertEquals(400, $range->minimum);
         $this->assertEquals(600, $range->maximum);
     }
 
     public function testGetRangeFromValue_MultipleValidBuffers_CreatesRange()
     {
-        $range = AwardRange::GetRangeFromValue(500, 50, 200);
+        $range = AwardRange::getRangeFromValue(500, 50, 200);
         $this->assertEquals(450, $range->minimum);
         $this->assertEquals(700, $range->maximum);
     }
@@ -56,7 +56,7 @@ class AwardRangeTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRangeFromValue_FirstNegativeBufferValue_ThrowsException()
     {
-        AwardRange::GetRangeFromValue(400, -100, 500);
+        AwardRange::getRangeFromValue(400, -100, 500);
     }
 
     /**
@@ -64,7 +64,7 @@ class AwardRangeTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRangeFromValue_FirstSecondBufferValue_ThrowsException()
     {
-        AwardRange::GetRangeFromValue(400, 100, -500);
+        AwardRange::getRangeFromValue(400, 100, -500);
     }
 
     /**
@@ -72,19 +72,19 @@ class AwardRangeTest extends PHPUnit_Framework_TestCase
      */
     public function testGetRangeFromValue_NegativeMinAwardValue_ThrowsException()
     {
-        AwardRange::GetRangeFromValue(400, 100, 100, -100);
+        AwardRange::getRangeFromValue(400, 100, 100, -100);
     }
 
     public function testGetRangeFromValue_MinimumLessThanMinAwardValue_MinimumEqualsZero()
     {
-        $range = AwardRange::GetRangeFromValue(500, 100, 100, 500);
+        $range = AwardRange::getRangeFromValue(500, 100, 100, 500);
         $this->assertEquals(0, $range->minimum);
         $this->assertEquals(600, $range->maximum);
     }
 
     public function testGetRangeFromValue_MaximumLessThanMinAwardValue_BothEqualZero()
     {
-        $range = AwardRange::GetRangeFromValue(500, 100, 100, 700);
+        $range = AwardRange::getRangeFromValue(500, 100, 100, 700);
         $this->assertEquals(0, $range->minimum);
         $this->assertEquals(0, $range->maximum);
     }
