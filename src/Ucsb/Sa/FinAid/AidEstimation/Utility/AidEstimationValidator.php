@@ -758,7 +758,7 @@ class AidEstimationValidator
                 self::ParamParentIncomeEarnedBy);
 
         // CHECK: If Single/Separated/Divorced, "Parent Income Earned By" can not be "Both"
-        if ($maritalStatus == MaritalStatus::SingleSeparatedDivorced && incomeEarnedBy == IncomeEarnedBy::Both)
+        if ($maritalStatus == MaritalStatus::SingleSeparatedDivorced && $incomeEarnedBy == IncomeEarnedBy::Both)
         {
             $this->_validator->errors[] = new ValidationError(self::ParamParentIncomeEarnedBy,
                 sprintf('%s was "Single/Separated/Divorced", but %s was marked as earned by both parents',
