@@ -82,21 +82,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dependent Full Aid Estimator Example</title>
 	<meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0;" />
+	
+	<title>Dependent Full Aid Estimator Example</title>
+
+    <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+    <link href="../style/main.css" rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
-    <p>
-        This Financial Aid Estimator provides an estimation of financial aid for <strong>prospective full-time,
-        dependent undergraduate students</strong>. The estimated values produced by this tool are
-        <strong>not</strong> the actual amounts that will be offered by an institution. All estimated values
-        are <strong>subject to the availability of funding</strong>. To begin the actual financial aid
-        application process, complete a <a href="http://www.fafsa.ed.gov/">FAFSA</a>.
-    </p>
+<div id="root">
+
+	<h1>Financial Aid Estimator</h1>
+	<h2>University Name</h2>
+	
+	<p>
+		The Financial Aid Estimator provides an estimated Financial Aid Award Letter for prospective students.
+		The estimated values produced by this tool are not the actual amounts
+		that will be offered in your final Financial Aid Award Letter. All estimated values are <strong>subject to the
+		availability of funding</strong>. To begin the actual Financial Aid application process, complete a
+		<a href="http://www.fafsa.ed.gov/">FAFSA</a>. 
+	</p>
 
     <?php if($formState == "error"): ?>
-    <p>There was an error with the values for the following fields:</p>
-    <ul>
+    <p class="error">There was an error with the values for the following fields:</p>
+	
+    <ul class="error error-list">
         <?php foreach($validator->getErrors() as $error): ?>
         <li><?php echo $error->message; ?></li>
         <?php endforeach; ?>
@@ -114,11 +125,11 @@
                 <fieldset>
                     <legend>Parent(s)' Marital Status</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="parent-marital-status-single" name="marital-status" value="single" <?php if($rawArgs->maritalStatus == 'single') { echo 'checked'; }  ?> />
                             <label for="parent-marital-status-single">Single/Separated/Divorced</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="parent-marital-status-married" name="marital-status" value="married" <?php if($rawArgs->maritalStatus == 'married') { echo 'checked'; }  ?> />
                             <label for="parent-marital-status-married">Married/Remarried</label>
                         </li>
@@ -129,11 +140,11 @@
                 <fieldset>
                     <legend>Did the First Parent Work?</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="first-parent-working-yes" name="first-parent-working" value="true" <?php if($rawArgs->isFirstParentWorking == 'true') { echo 'checked'; }  ?> />
                             <label for="first-parent-working-yes">Yes, the First Parent worked</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="first-parent-working-no" name="first-parent-working" value="false" <?php if($rawArgs->isFirstParentWorking == 'false') { echo 'checked'; }  ?> />
                             <label for="first-parent-working-no">No, the First Parent did <em>not</em> work</label>
                         </li>
@@ -148,11 +159,11 @@
                 <fieldset>
                     <legend>Did the Second Parent Work?</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="second-parent-working-yes" name="second-parent-working" value="true" <?php if($rawArgs->isSecondParentWorking == 'true') { echo 'checked'; }  ?> />
                             <label for="second-parent-working-yes">Yes, the Second Parent worked</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="second-parent-working-no" name="second-parent-working" value="false" <?php if($rawArgs->isSecondParentWorking == 'false') { echo 'checked'; }  ?> />
                             <label for="second-parent-working-no">No, the Second Parent did <em>not</em> work</label>
                         </li>
@@ -167,11 +178,11 @@
                 <fieldset>
                     <legend>Did the Student Work?</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="student-working-yes" name="student-working" value="true" <?php if($rawArgs->isStudentWorking == 'true') { echo 'checked'; }  ?> />
                             <label for="student-working-yes">Yes, the Student worked</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="student-working-no" name="student-working" value="false" <?php if($rawArgs->isStudentWorking == 'false') { echo 'checked'; }  ?> />
                             <label for="student-working-no">No, the Student did <em>not</em> work</label>
                         </li>
@@ -190,11 +201,11 @@
                 <fieldset>
                     <legend>Did Parent(s) File Taxes?</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="are-parents-tax-filers-yes" name="are-parents-tax-filers" value="true" <?php if($rawArgs->areParentsTaxFilers == 'true') { echo 'checked'; }  ?> />
                             <label for="are-parents-tax-filers-yes">Yes, my Parent(s) filed taxes</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="are-parents-tax-filers-no" name="are-parents-tax-filers" value="false" <?php if($rawArgs->areParentsTaxFilers == 'false') { echo 'checked'; }  ?> />
                             <label for="are-parents-tax-filers-no">No, my Parent(s) did <em>not</em> file taxes</label>
                         </li>
@@ -226,11 +237,11 @@
                 <fieldset>
                     <legend>Did the Student File Taxes?</legend>
                     <ul>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="is-student-tax-filer-yes" name="is-student-tax-filer" value="true" <?php if($rawArgs->isStudentTaxFiler == 'true') { echo 'checked'; }  ?> />
                             <label for="is-student-tax-filer-yes">Yes, I filed taxes</label>
                         </li>
-                        <li>
+                        <li class="radio-input-wrapper">
                             <input type="radio" id="is-student-tax-filer-no" name="is-student-tax-filer" value="false" <?php if($rawArgs->isStudentTaxFiler == 'false') { echo 'checked'; }  ?> />
                             <label for="is-student-tax-filer-no">No, I did <em>not</em> file taxes</label>
                         </li>
@@ -354,24 +365,109 @@
                     <option value="Other">Other</option>
                 </select>
             </li>
-            <li>    
-                <input type="submit" value="Calculate EFC" />
+            <li class="button-wrapper">    
+                <input type="submit" value="Calculate EFC" class="button" id="submit-btn" />
             </li>
         </ul>
     </form>
     <?php endif; ?>
 
     <?php if($formState == "results"): ?>
-    <h3>Expected Family Contribution</h3>
-    
-    <ul>
-        <li>Student Contribution (SC): <?php echo $efcProfile->studentContribution; ?></li>
-        <li>Parent Contribution (PC): <?php echo $efcProfile->parentContribution; ?></li>
-        <li>Expected Family Contribution (EFC): <?php echo $efcProfile->expectedFamilyContribution; ?></li>
-    </ul>
-
-    <a href="dependent.php">&laquo; Return to Calculator</a>
+	<div class="results-wrapper">
+		<h3>Expected Family Contribution</h3>
+		
+		<ul class="results">
+			<li>
+				<span class="result-label">
+					Student Contribution
+					<span class="description">Amount that you are expected to contribute towards the cost of your education</span>
+				</span>
+				<span class="result-amount">$<?php echo $efcProfile->studentContribution; ?></span>
+			</li>
+			<li>
+				<span class="result-label">
+					Parent Contribution
+					<span class="description">Amount that your parents are expected to contribute towards the cost of your education</span>
+				</span>
+				<span class="plus-operator">+</span><span class="result-amount"><?php echo $efcProfile->parentContribution; ?></span>
+			</li>
+			<li class="total">
+				<span class="result-label">
+					Expected Family Contribution
+					<span class="description">Sum of the Student Contribution (SC) and Parent Contribution (PC)</span>
+				</span>
+				<span class="result-amount"><?php echo $efcProfile->expectedFamilyContribution; ?></span>
+			</li>
+		</ul>
+		
+		<h3>Estimated Total Price of Attendance</h3>
+		
+		<ul class="results">
+			<li>
+				<span class="result-label">
+					Tuition and Fees
+					<span class="description">Includes cost of education, university health care, and miscellaneous university fees</span>
+				</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li>
+				<span class="result-label">
+					Room and Board
+					<span class="description">Includes rent, food, and utilities</span>
+				</span>
+				<span class="plus-operator">+</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li>
+				<span class="result-label">
+					Books and Supplies
+					<span class="description">Includes books and supplies</span>
+				</span>
+				<span class="plus-operator">+</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li>
+				<span class="result-label">
+					Other Expenses
+					<span class="description">Includes transportation and miscellaneous personal expenses</span>
+				</span>
+				<span class="plus-operator">+</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li class="total">
+				<span class="result-label">
+					Total Cost of Attendance
+					<span class="description">The total cost of attendance</span>
+				</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li>
+				<span class="result-label">
+					Grant Award
+					<span class="description">Total estimated Grant Award</span>
+				</span>
+				<span class="minus-operator">-</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+			<li class="total">
+				<span class="result-label">
+					Estimated Net Cost
+					<span class="description">The total cost of attendance that you must contribute towards your education through either loans or out-of-pocket expense</span>
+				</span>
+				<span class="result-amount">$99,999.00</span>
+			</li>
+		</ul>
+		
+		<p id="cohort-notice">
+			<strong>XX%</strong> of first-year full-time dependent, undergraduate students received grant aid in 20XX-20YY
+		</p>
+		
+		<span class="button-wrapper">
+			<a href="dependent.php" class="button">&laquo; Return to Calculator</a>
+		</span>
+	</div>
     <?php endif; ?>
 
+</div>
 </body>
 </html>
