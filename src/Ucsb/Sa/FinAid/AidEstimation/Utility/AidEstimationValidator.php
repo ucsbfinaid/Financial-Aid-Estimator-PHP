@@ -561,7 +561,7 @@ class AidEstimationValidator
 
             // Spouse Work Income
             $spouseWorkIncome
-                = isSpouseWorking
+                = $isSpouseWorking
                         ? $this->_validator->validatePositiveMoneyValue(
                                 $args->spouseWorkIncome,
                                 self::LabelSpouseWorkIncome,
@@ -631,7 +631,7 @@ class AidEstimationValidator
         // Has Dependents?
         $hasDependents
             = $this->_validator->validateBoolean(
-                    $args->HasDependents,
+                    $args->hasDependents,
                     self::LabelIndStudentHasDep,
                     self::ParamIndStudentHasDep);
 
