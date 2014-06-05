@@ -1061,7 +1061,7 @@ class AidEstimationValidator
         // Has Dependents
         $hasDependents =
             $this->_validator->validateBoolean(
-                $args->HasDependents,
+                $args->hasDependents,
                 self::LabelIndStudentHasDep,
                 self::ParamIndStudentHasDep);
 
