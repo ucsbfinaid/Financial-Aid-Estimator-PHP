@@ -201,6 +201,11 @@
             <li>
                 <label for="state-of-residency">State of Residency</label>
                 <select id="state-of-residency" name="state-of-residency">
+                    <option value="Alabama">Alabama</option>
+                    <option value="Alaska">Alaska</option>
+                    <option value="AmericanSamoa">American Samoa</option>
+                    <option value="Arizona">Arizona</option>
+                    <option value="Arkansas">Arkansas</option>
                     <option value="California">California</option>
                     <option value="CanadaAndCanadianProvinces">Canada And Canadian Provinces</option>
                     <option value="Colorado">Colorado</option>
@@ -277,21 +282,21 @@
 					Student Contribution
 					<span class="description">Amount that you are expected to contribute towards the cost of your education</span>
 				</span>
-				<span class="result-amount">$<?php echo $efcProfile->studentContribution; ?></span>
+				<span class="result-amount">$<?php echo number_format($efcProfile->studentContribution, 2, '.', ','); ?></span>
 			</li>
 			<li>
 				<span class="result-label">
 					Parent Contribution
 					<span class="description">Amount that your parents are expected to contribute towards the cost of your education</span>
 				</span>
-				<span class="plus-operator">+</span><span class="result-amount"><?php echo $efcProfile->parentContribution; ?></span>
+				<span class="plus-operator">+</span><span class="result-amount">$<?php echo number_format($efcProfile->parentContribution, 2, '.', ','); ?></span>
 			</li>
 			<li class="total">
 				<span class="result-label">
 					Expected Family Contribution
 					<span class="description">Sum of the Student Contribution (SC) and Parent Contribution (PC)</span>
 				</span>
-				<span class="result-amount"><?php echo $efcProfile->expectedFamilyContribution; ?></span>
+				<span class="result-amount">$<?php echo number_format($efcProfile->expectedFamilyContribution, 2, '.', ','); ?></span>
 			</li>
 		</ul>
 		
