@@ -216,7 +216,7 @@ class AllowanceCalculator
 		            $incomeProtectionAllowance += ($numInHousehold - $maxHouseholdCount) * $additionalFamilyAllowance;
 		        }
 
-		        // If number of children in college exceeds table range, add additionalStudentAllowance
+		        // If number of children in college exceeds table range, subtract additionalStudentAllowance
 		        // for each additional child
 		        $maxCollegeCount = count($incomeProtectionAllowances[$maxHouseholdCount]) - 1;
 		        $collegeCount = $numInCollege;
