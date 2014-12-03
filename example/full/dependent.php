@@ -1,14 +1,17 @@
 <?php
     // Set up autoloading for classes
     spl_autoload_register(function ($class) {
-        include dirname(dirname(dirname(__FILE__))) . '/src/' . $class . '.php';
+        include dirname(dirname(dirname(__FILE__)))
+          . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR
+          . str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
     });
 
     use Ucsb\Sa\FinAid\AidEstimation\Utility\AidEstimationValidator;
     use Ucsb\Sa\FinAid\AidEstimation\Utility\EfcCalculatorFactory;
     use Ucsb\Sa\FinAid\AidEstimation\Utility\RawDependentEfcCalculatorArguments;
 
-    EfcCalculatorFactory::$constantsPath = dirname(dirname(dirname(__FILE__))) . '/constants/';
+    EfcCalculatorFactory::$constantsPath = dirname(dirname(dirname(__FILE__)))
+      . DIRECTORY_SEPARATOR . 'constants' . DIRECTORY_SEPARATOR;
 
     // Create a utility function for retrieving POST values
     function getPost($key) {
@@ -84,7 +87,7 @@
 <head>
 	<meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0;" />
-	
+
 	<title>Dependent Full Aid Estimator Example</title>
 
     <link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
@@ -95,18 +98,18 @@
 
 	<h1>Financial Aid Estimator</h1>
 	<h2>University Name</h2>
-	
+
 	<p>
 		The Financial Aid Estimator provides an estimated Financial Aid Award Letter for prospective students.
 		The estimated values produced by this tool are not the actual amounts
 		that will be offered in your final Financial Aid Award Letter. All estimated values are <strong>subject to the
 		availability of funding</strong>. To begin the actual Financial Aid application process, complete a
-		<a href="http://www.fafsa.ed.gov/">FAFSA</a>. 
+		<a href="http://www.fafsa.ed.gov/">FAFSA</a>.
 	</p>
 
     <?php if($formState == "error"): ?>
     <p class="error">There was an error with the values for the following fields:</p>
-	
+
     <ul class="error error-list">
         <?php foreach($validator->getErrors() as $error): ?>
         <li><?php echo $error->message; ?></li>
@@ -370,7 +373,7 @@
                     <option value="Other">Other</option>
                 </select>
             </li>
-            <li class="button-wrapper">    
+            <li class="button-wrapper">
                 <input type="submit" value="Calculate EFC" class="button" id="submit-btn" />
             </li>
         </ul>
@@ -380,7 +383,7 @@
     <?php if($formState == "results"): ?>
 	<div class="results-wrapper">
 		<h3>Expected Family Contribution</h3>
-		
+
 		<ul class="results">
 			<li>
 				<span class="result-label">
@@ -404,9 +407,9 @@
 				<span class="result-amount">$<?php echo number_format($efcProfile->expectedFamilyContribution, 2, '.', ','); ?></span>
 			</li>
 		</ul>
-		
+
 		<h3>Estimated Total Price of Attendance</h3>
-		
+
 		<ul class="results">
 			<li>
 				<span class="result-label">
@@ -462,11 +465,11 @@
 				<span class="result-amount">$99,999.00</span>
 			</li>
 		</ul>
-		
+
 		<p id="cohort-notice">
 			<strong>XX%</strong> of first-year full-time dependent, undergraduate students received grant aid in 20XX-20YY
 		</p>
-		
+
 		<span class="button-wrapper">
 			<a href="dependent.php" class="button">&laquo; Return to Calculator</a>
 		</span>
