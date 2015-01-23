@@ -264,7 +264,7 @@ class EfcCalculator
                 $workIncome += $args->spouse->workIncome;
             }
 
-            $householdMembers[] = ($args->student);
+            $householdMembers[] = ($args->spouse);
         }
 
         $simpleIncome = ($args->areTaxFilers) ? $args->adjustedGrossIncome : $workIncome;

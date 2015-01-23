@@ -77,7 +77,7 @@ class TestConstantsFactory
         return $constants;
 	}
 
-	public function getAssetContributionCalculatorConstants()
+	public static function getAssetContributionCalculatorConstants()
 	{
 		$constants = new AssetContributionCalculatorConstants();
 

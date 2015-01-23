@@ -450,6 +450,38 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
         $this->assertEquals(50052, $profile->expectedFamilyContribution);
     }
+	
+    public function testGetIndependentEfcProfile_DifferentSpouseIncome_Calculated()
+    {
+        $args = new IndependentEfcCalculatorArguments();
+
+        $args->student = new HouseholdMember();
+        $args->student->isWorking = true;
+        $args->student->workIncome = 600000;
+
+        $args->spouse= new HouseholdMember();
+        $args->spouse->isWorking = true;
+        $args->spouse->workIncome = 900000;
+
+        $args->adjustedGrossIncome = 1200000;
+        $args->areTaxFilers = true;
+        $args->incomeTaxPaid = 6000;
+        $args->untaxedIncomeAndBenefits = 10000;
+        $args->additionalFinancialInfo = 2000;
+        $args->cashSavingsCheckings = 100000;
+        $args->investmentNetWorth = 8000;
+        $args->businessFarmNetWorth = 350000;
+        $args->hasDependents = true;
+        $args->maritalStatus = MaritalStatus::MarriedRemarried;
+        $args->stateOfResidency = UnitedStatesStateOrTerritory::Alaska;
+        $args->numberInHousehold =  20;
+        $args->numberInCollege =  10;
+        $args->age = 30;
+        $args->monthsOfEnrollment = 9;
+
+        $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
+        $this->assertEquals(49847, $profile->expectedFamilyContribution);
+    }
 
     public function testGetDependentEfcProfile_SimplifiedHighAssets_Calculated()
     {
