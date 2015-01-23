@@ -1,5 +1,5 @@
 <?php
-class EfcCalculationConstants1415
+class EfcCalculationConstants1516
 {
 	/* 2015-2016: Table A1 */
 	public $stateTaxAllowanceIncomeThreshold = 15000;
