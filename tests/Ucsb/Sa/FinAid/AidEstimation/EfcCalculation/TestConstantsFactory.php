@@ -11,9 +11,9 @@ class TestConstantsFactory
 	{
 		$constants = new AaiContributionCalculatorConstants();
 
-        $constants->aaiContributionBases = array(0, 3366, 4341, 5472, 6798, 8358);
+        $constants->aaiContributionBases = array(0, 3740, 4840, 6087, 7583, 9343);
         $constants->aaiContributionPercents = array(22, 25, 29, 34, 40, 47);
-        $constants->aaiContributionRanges = array(-3409, 15300, 19200, 23100, 27000, 30900);
+        $constants->aaiContributionRanges = array(-3409, 17000, 21400, 25700, 30100, 34500);
 
         return $constants;
 	}
@@ -25,54 +25,170 @@ class TestConstantsFactory
 		$constants->stateTaxAllowanceIncomeThreshold = 15000;
 
         $constants->parentStateTaxAllowancePercents = array(
-            2, 3, 2, 2, 4, 4, 8, 2, 5, 8, 5, 7, 2, 3, 6, 2, 4, 5, 5, 4, 5, 5, 5, 3, 6, 2, 8,
-            7, 2, 5, 6, 3, 5, 5, 5, 3, 5, 9, 3, 9, 6, 3, 2, 6, 4, 7, 2, 5, 2, 7, 5, 2, 2, 3,
-            5, 6, 2, 6, 4, 3, 7, 2
+            3, // Other
+            3, // Alabama
+            2, // Alaska
+            3, // American Samoa
+            4, // Arizona
+            4, // Arkansas
+            8, // Calfornia
+            3, // Canada and Canadian Provinces
+            4, // Colorado
+            9, // Connecticut
+            5, // Delaware
+            7, // District of Columbia
+            3, // Federated States of Micronesia
+            3, // Florida
+            5, // Georgia
+            3, // Guam
+            5, // Hawaii
+            5, // Idaho
+            5, // Illinois
+            4, // Indiana
+            5, // Iowa
+            4, // Kansas
+            5, // Kentucky
+            3, // Louisiana
+            6, // Maine
+            3, // Marshall Islands
+            8, // Maryland
+            7, // Massachusetts
+            3, // Mexico
+            4, // Michigan
+            6, // Minnesota
+            3, // Mississippi
+            5, // Missouri
+            5, // Montana
+            5, // Nebraska
+            2, // Nevada
+            4, // New Hampshire
+            9, // New Jersey
+            3, // New Mexico
+            9, // New York
+            5, // North Carolina
+            2, // North Dakota
+            3, // Northern Mariana Islands
+            5, // Ohio
+            3, // Oklahoma
+            7, // Oregon
+            3, // Palau
+            5, // Pennsylvania
+            3, // Puerto Rico
+            6, // Rhode Island
+            4, // South Carolina
+            2, // South Dakota
+            2, // Tennessee
+            3, // Texas
+            5, // Utah
+            6, // Vermont
+            3, // Virgin Islands
+            6, // Virginia
+            3, // Washington
+            3, // West Virginia
+            6, // Wisconsin
+            2  // Wyoming
         );
 
         $constants->studentStateTaxAllowancePercents = array(
-            2, 2, 0, 2, 2, 3, 5, 2, 3, 5, 3, 5, 2, 1, 3, 2, 3, 3, 2, 3, 3, 3, 4, 2, 4, 2, 6,
-            4, 2, 3, 4, 3, 3, 3, 3, 1, 1, 4, 2, 6, 4, 1, 2, 3, 3, 5, 2, 3, 2, 4, 3, 1, 1, 1,
-            3, 3, 2, 4, 1, 2, 4, 1
+            2, // Other
+            2, // Alabama
+            0, // Alaska
+            2, // American Samoa
+            2, // Arizona
+            3, // Arkansas
+            6, // California
+            2, // Canada and Canadian Provinces
+            3, // Colorado
+            5, // Connecticut
+            3, // Delaware
+            6, // District of Columbia
+            2, // Federated States of Micronesia
+            1, // Florida
+            3, // Georgia
+            2, // Guam
+            4, // Hawaii
+            3, // Idaho
+            3, // Illinois
+            3, // Indiana
+            3, // Iowa
+            2, // Kansas
+            4, // Kentucky
+            2, // Louisiana
+            3, // Maine
+            2, // Marshall Islands
+            6, // Maryland
+            4, // Massachusetts
+            2, // Mexico
+            3, // Michigan
+            5, // Minnesota
+            2, // Mississippi
+            3, // Missouri
+            3, // Montana
+            3, // Nebraska
+            1, // Nevada
+            1, // New Hampshire
+            5, // New Jersey
+            2, // New Mexico
+            7, // New York
+            3, // North Carolina
+            1, // North Dakota
+            2, // Northern Mariana Islands
+            3, // Ohio
+            2, // Oklahoma
+            5, // Oregon
+            2, // Palau
+            3, // Pennsylvania
+            2, // Puerto Rico
+            3, // Rhode Island
+            3, // South Carolina
+            1, // South Dakota
+            1, // Tennessee
+            1, // Texas
+            3, // Utah
+            3, // Vermont
+            2, // Virgin Islands
+            4, // Virginia
+            1, // Washington
+            3, // West Virginia
+            4, // Wisconsin
+            1 // Wyoming
         );
 
-        $constants->socialSecurityTaxIncomeThreshold = 110100;
-        $constants->socialSecurityLowPercent = 0.0765;
-        $constants->socialSecurityHighPercent = 0.0145;
-        $constants->socialSecurityHighBase = 8422.65;
+        $constants->socialSecurityTaxIncomeThresholds = array(0, 128400, 200000);
+        $constants->socialSecurityTaxPercentages = array(0.0765, 0.0145, 0.0235);
+        $constants->socialSecurityTaxBases = array(0, 9822.60, 10860.80);
 
         $constants->employmentExpensePercent = 0.35;
-        $constants->employmentExpenseMaximum = 3900;
+        $constants->employmentExpenseMaximum = 4000;
 
         $constants->dependentParentIncomeProtectionAllowances = array(
             array( 0, 0, 0, 0, 0, 0 ),
             array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 17100, 14170, 0, 0, 0 ),
-            array( 0, 21290, 18380, 15450, 0, 0 ),
-            array( 0, 26290, 23370, 20460, 17530, 0 ),
-            array( 0, 31020, 28100, 25190, 22260, 19350 ),
-            array( 0, 36290, 33360, 30450, 27530, 24620 )
+            array( 0, 19080, 15810, 0, 0, 0 ),
+            array( 0, 23760, 20510, 17250, 0, 0 ),
+            array( 0, 34620, 31350, 28110, 24840, 21600 ),
+            array( 0, 40490, 37230, 33980, 30720, 27470 )
         );
 
         $constants->independentWithDependentsIncomeProtectionAllowances = array(
             array( 0, 0, 0, 0, 0, 0 ),
             array( 0, 0, 0, 0, 0, 0 ),
-            array( 0, 24150, 20020, 0, 0, 0 ),
-            array( 0, 30070, 25960, 21830, 0, 0 ),
-            array( 0, 37130, 33010, 28900, 24760, 0 ),
-            array( 0, 43810, 39670, 35570, 31450, 27340 ),
-            array( 0, 51230, 47110, 43020, 38870, 34770 )
+            array( 0, 26940, 22340, 0, 0, 0 ),
+            array( 0, 33550, 28960, 24360, 0, 0 ),
+            array( 0, 41420, 36830, 32250, 27630, 0 ),
+            array( 0, 48880, 44260, 39680, 35080, 30500 ),
+            array( 0, 57160, 52560, 47990, 43360, 38790 )
         );
 
-        $constants->dependentAdditionalStudentAllowance = 2910;
-        $constants->dependentAdditionalFamilyAllowance = 4100;
+        $constants->dependentAdditionalStudentAllowance = 3250;
+        $constants->dependentAdditionalFamilyAllowance = 4750;
 
-        $constants->independentAdditionalStudentAllowance = 4110;
-        $constants->independentAdditionalFamilyAllowance = 5780;
+        $constants->independentAdditionalStudentAllowance = 4580;
+        $constants->independentAdditionalFamilyAllowance = 6450;
 
-        $constants->dependentStudentIncomeProtectionAllowance = 6130;
-        $constants->singleIndependentWithoutDependentsIncomeProtectionAllowance = 9540;
-        $constants->marriedIndependentWithoutDependentsIncomeProtectionAllowance = 15290;
+        $constants->dependentStudentIncomeProtectionAllowance = 6840;
+        $constants->singleIndependentWithoutDependentsIncomeProtectionAllowance = 10640;
+        $constants->marriedIndependentWithoutDependentsIncomeProtectionAllowance = 17060;
 
         return $constants;
 	}
@@ -89,23 +205,95 @@ class TestConstantsFactory
         $constants->assetProtectionAllowanceLowestAge = 25;
 
         $constants->marriedAssetProtectionAllowances = array(
-            0, 2100, 4300, 6400, 8600, 10700, 12800, 15000, 17100, 19300,
-            21400, 23500, 25700, 27800, 30000, 32100, 32900, 33700, 34500,
-            35400, 36200, 37100, 38000, 39000, 39900, 40900, 42100, 43100,
-            44200, 45500, 46800, 47900, 49300, 50800, 52200, 53500, 55000,
-            56900, 58500, 60100, 61800,
+            0,
+            300,
+            700,
+            1000,
+            1300,
+            1600,
+            2000,
+            2300,
+            2600,
+            2900,
+            3300,
+            3600,
+            3900,
+            4200,
+            4600,
+            4900,
+            5100,
+            5200,
+            5300,
+            5400,
+            5500,
+            5700,
+            5800,
+            6000,
+            6100,
+            6300,
+            6400,
+            6600,
+            6800,
+            6900,
+            7100,
+            7300,
+            7500,
+            7700,
+            7900,
+            8200,
+            8400,
+            8600,
+            8900,
+            9200,
+            9400
         );
 
         $constants->singleAssetProtectionAllowances = array(
-            0, 600, 1300, 1900, 2500, 3200, 3800, 4400, 5100, 5700, 6300,
-            7000, 7600, 8200, 8900, 9500, 9700, 9900, 10100, 10300, 10600,
-            10800, 11100, 11300, 11600, 11900, 12200, 12500, 12800, 13100,
-            13400, 13700, 14100, 14400, 14800, 15100, 15600, 16000, 16400,
-            16900, 17400
+            0,
+            100,
+            200,
+            300,
+            500,
+            600,
+            700,
+            800,
+            900,
+            1000,
+            1100,
+            1200,
+            1400,
+            1500,
+            1600,
+            1700,
+            1700,
+            1700,
+            1800,
+            1800,
+            1900,
+            1900,
+            1900,
+            2000,
+            2000,
+            2100,
+            2100,
+            2200,
+            2200,
+            2300,
+            2300,
+            2400,
+            2500,
+            2500,
+            2600,
+            2700,
+            2700,
+            2800,
+            2900,
+            2900,
+            3000
         );
 
-        $constants->businessFarmNetWorthAdjustmentRanges = array( 1, 120000, 365000, 610000 );
-        $constants->businessFarmNetWorthAdjustmentBases = array( 0, 48000, 170500, 317500 );
+        $constants->businessFarmNetWorthAdjustmentRanges = array( 1, 135000, 410000, 680000 );
+        $constants->businessFarmNetWorthAdjustmentBases = array( 0, 54000, 191500, 353500 );
         $constants->businessFarmNetWorthAdjustmentPercents = array( 40, 50, 60, 100 );
 
         return $constants;
@@ -123,9 +311,9 @@ class TestConstantsFactory
 	{
         $constants = new EfcCalculatorConstants();
 
-        $constants->altEnrollmentIncomeProtectionAllowance = 4730;
+        $constants->altEnrollmentIncomeProtectionAllowance = 5280;
         $constants->simplifiedEfcMax = 49999;
-        $constants->autoZeroEfcMax = 24000;
+        $constants->autoZeroEfcMax = 26000;
 
         return $constants;
 	}

@@ -183,7 +183,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getDependentEfcProfile($args);
-        $this->assertEquals(9278, $profile->expectedFamilyContribution);
+        $this->assertEquals(7923, $profile->expectedFamilyContribution);
     }
 
     public function testGetDependentEfcProfile_HighValues_Calculated()
@@ -225,7 +225,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getDependentEfcProfile($args);
-        $this->assertEquals(48227, $profile->expectedFamilyContribution);
+        $this->assertEquals(46943, $profile->expectedFamilyContribution);
     }
 
     public function testGetIndependentEfcProfile_ZeroNumberInCollege_ZeroEfc()
@@ -320,7 +320,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(36727, $profile->expectedFamilyContribution);
+        $this->assertEquals(36177, $profile->expectedFamilyContribution);
     }
 
     public function testGetIndependentEfcProfile_HighValues_Calculated()
@@ -352,7 +352,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(299467, $profile->expectedFamilyContribution);
+        $this->assertEquals(297710, $profile->expectedFamilyContribution);
     }
 
     public function testGetIndependentEfcProfile_HasDependentsLowValues_Calculated()
@@ -416,7 +416,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(6762, $profile->expectedFamilyContribution);
+        $this->assertEquals(5595, $profile->expectedFamilyContribution);
     }
 
     public function testGetIndependentEfcProfile_HasDependentsHighValues_Calculated()
@@ -448,7 +448,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(50052, $profile->expectedFamilyContribution);
+        $this->assertEquals(49037, $profile->expectedFamilyContribution);
     }
 	
     public function testGetIndependentEfcProfile_DifferentSpouseIncome_Calculated()
@@ -480,7 +480,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(49847, $profile->expectedFamilyContribution);
+        $this->assertEquals(48706, $profile->expectedFamilyContribution);
     }
 
     public function testGetDependentEfcProfile_SimplifiedHighAssets_Calculated()
@@ -523,7 +523,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getDependentEfcProfile($args);
-        $this->assertEquals(3912, $profile->expectedFamilyContribution);
+        $this->assertEquals(3281, $profile->expectedFamilyContribution);
     }
 
     public function testGetIndependentEfcProfile_SimplifiedHighAssets_Calculated()
@@ -556,7 +556,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 9;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(1255, $profile->expectedFamilyContribution);
+        $this->assertEquals(467, $profile->expectedFamilyContribution);
     }
 
     public function testGetDependentEfcProfile_AutoZero_Calculated()
@@ -712,8 +712,8 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 3;
 
         $profile = $this->_efcCalculator->getDependentEfcProfile($args);
-        $this->assertEquals(2625, $profile->parentContribution);
-        $this->assertEquals(867, $profile->studentContribution);
+        $this->assertEquals(2307, $profile->parentContribution);
+        $this->assertEquals(732, $profile->studentContribution);
     }
 
     public function testGetDependentEfcProfile_TwelveMonthsEnrollment_Calculated()
@@ -753,8 +753,8 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 12;
 
         $profile = $this->_efcCalculator->getDependentEfcProfile($args);
-        $this->assertEquals(8409, $profile->parentContribution);
-        $this->assertEquals(1403, $profile->studentContribution);
+        $this->assertEquals(7423, $profile->parentContribution);
+        $this->assertEquals(998, $profile->studentContribution);
     }
 
     public function testGetIndependentEfcProfile_NoMonthsOfEnrollment_Calculated()
@@ -814,7 +814,7 @@ class EfcCalculatorTest extends \PHPUnit_Framework_TestCase
         $args->monthsOfEnrollment = 3;
 
         $profile = $this->_efcCalculator->getIndependentEfcProfile($args);
-        $this->assertEquals(12243, $profile->expectedFamilyContribution);
+        $this->assertEquals(12060, $profile->expectedFamilyContribution);
     }
 }
 ?>

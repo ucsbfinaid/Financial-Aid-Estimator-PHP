@@ -26,28 +26,22 @@ class AllowanceCalculatorConstants
     public $studentStateTaxAllowancePercents;
 
     /**
-     * Threshold value used in determining the formula for Social Security Tax Allowance
-     * @var int
+     * Threshold values used in determining the formula for Social Security Tax Allowance
+     * @var int[]
      */
-    public $socialSecurityTaxIncomeThreshold;
+    public $socialSecurityTaxIncomeThresholds;
 
  	/**
- 	 * Percentage used in formula for Social Security Tax Allowance for incomes below the threshold
- 	 * @var float
+ 	 * Base values used in calculating Social Security Tax Allowance
+ 	 * @var float[]
  	 */
-    public $socialSecurityLowPercent;
+    public $socialSecurityTaxBases;
 
-    /**
-     * Percentage used in formula for Social Security Tax Allowance for incomes above the threshold
-     * @var float
-     */
-    public $socialSecurityHighPercent;
-
-    /**
-     * Base value used in formula for Social Security Tax Allowance for incomes above the threshold
-     * @var float
-     */
-    public $socialSecurityHighBase;
+ 	/**
+ 	 * Percentage values used in calculating Social Security Tax Allowance
+ 	 * @var float[]
+ 	 */
+     public $socialSecurityTaxPercentages;
 
     /**
      * Percentage used in calculating Employment Expense Allowance
