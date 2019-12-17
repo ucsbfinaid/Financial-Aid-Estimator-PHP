@@ -54,14 +54,14 @@ class AssetContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->_calculator
             ->calculateAdjustedBusinessFarmNetWorthContribution(EfcCalculationRole::Parent, 202202);
-        $this->assertEquals(89101, $result);
+        $this->assertEquals(87601, $result);
     }
 
     public function testCalculateAdjustedBusinessFarmNetWorthContribution_HighValue_Calculated()
     {
         $result = $this->_calculator
             ->calculateAdjustedBusinessFarmNetWorthContribution(EfcCalculationRole::Parent, 202202202);
-        $this->assertEquals(201909702, $result);
+        $this->assertEquals(201875702, $result);
     }
 
     public function testCalculateAdjustedBusinessFarmNetWorthContribution_LowValue_Calculated()
@@ -116,7 +116,7 @@ class AssetContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     public function testCalculateAssetProtectionAllowance_Values_Calculated()
     {
         $result = $this->_calculator->calculateAssetProtectionAllowance(MaritalStatus::MarriedRemarried, 30);
-        $this->assertEquals(10700, $result);
+        $this->assertEquals(1600, $result);
     }
 
     public function testCalculateAssetProtectionAllowance_LowAge_EqualZero()
@@ -128,20 +128,20 @@ class AssetContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     public function testCalculateAssetProtectionAllowance_HighAge_Calculated()
     {
         $result = $this->_calculator->calculateAssetProtectionAllowance(MaritalStatus::MarriedRemarried, 70);
-        $this->assertEquals(61800, $result);
+        $this->assertEquals(9400, $result);
     }
 
     public function testCalculateAssetProtectionAllowance_SingleParent_Calculated()
     {
         $result = $this->_calculator->calculateAssetProtectionAllowance(MaritalStatus::SingleSeparatedDivorced, 45);
-        $this->assertEquals(10600, $result);
+        $this->assertEquals(1900, $result);
     }
 
     public function testCalculateDiscretionaryNetWorth_Values_Calculated()
     {
         $result = $this->_calculator
-            ->calculateDiscretionaryNetWorth(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 45, 6000, 26000, 9000);
-        $this->assertEquals(-600, $result);
+            ->calculateDiscretionaryNetWorth(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 45, 600, 200, 900);
+        $this->assertEquals(-4340, $result);
     }
 
     public function testCalculateContributionFromAssets_Values_Calculated()
@@ -154,7 +154,7 @@ class AssetContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     public function testCalculateContributionFromAssets_NegativeValue_EqualsZero()
     {
         $result = $this->_calculator
-            ->calculateContributionFromAssets(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 45, 6000, 26000, 9000);
+            ->calculateContributionFromAssets(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 45, 600, 200, 900);
         $this->assertEquals(0, $result);
     }
 
@@ -169,14 +169,14 @@ class AssetContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->_calculator
             ->calculateContributionFromAssets(EfcCalculationRole::IndependentStudentWithoutDependents, MaritalStatus::MarriedRemarried, 30, 6000, 26000, 9000);
-        $this->assertEquals(4980, $result);
+        $this->assertEquals(6800, $result);
     }
 
     public function testCalculateContributionFromAssets_IndependentStudentWithDep_Calculated()
     {
         $result = $this->_calculator
             ->calculateContributionFromAssets(EfcCalculationRole::IndependentStudentWithDependents, MaritalStatus::MarriedRemarried, 30, 6000, 26000, 9000);
-        $this->assertEquals(1743, $result);
+        $this->assertEquals(2380, $result);
     }
 }
 ?>

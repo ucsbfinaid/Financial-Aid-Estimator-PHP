@@ -56,7 +56,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
     function testCalculateStateTaxAllowance_DependentStudent_Calculated()
     {
         $result = $this->_allowanceCalculator->calculateStateTaxAllowance(EfcCalculationRole::DependentStudent, UnitedStatesStateOrTerritory::California, 3000);
-        $this->assertEquals(150, $result);
+        $this->assertEquals(180, $result);
     }
 
     function testCalculateStateTaxAllowance_IndependentStudentWithDep_Calculated()
@@ -68,7 +68,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
     function testCalculateStateTaxAllowance_IndependentStudentWithoutDep_Calculated()
     {
         $result = $this->_allowanceCalculator->calculateStateTaxAllowance(EfcCalculationRole::IndependentStudentWithoutDependents, UnitedStatesStateOrTerritory::California, 3000);
-        $this->assertEquals(150, $result);
+        $this->assertEquals(180, $result);
     }
 
     function testCalculateStateTaxAllowance_DecimalValue_Rounded()
@@ -82,11 +82,17 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->_allowanceCalculator->calculateSocialSecurityTaxAllowance(106800);
         $this->assertEquals(8170, $result);
     }
+
+    function testCalculateSocialSecurityTaxAllowance_MidRange_Calculated()
+    {
+        $result = $this->_allowanceCalculator->calculateSocialSecurityTaxAllowance(136000);
+        $this->assertEquals(9933, $result);
+    }
     
     function testCalculateSocialSecurityTaxAllowance_HighRange_Calculated()
     {
         $result = $this->_allowanceCalculator->calculateSocialSecurityTaxAllowance(206800);
-        $this->assertEquals(9825, $result);
+        $this->assertEquals(11021, $result);
     }
 
     function testCalculateSocialSecurityTaxAllowance_NegativeValue_EqualsZero()
@@ -98,7 +104,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
     function testCalculateSocialSecurityTaxAllowance_DecimalValue_Rounded()
     {
         $result = $this->_allowanceCalculator->calculateSocialSecurityTaxAllowance(206800.56);
-        $this->assertEquals(9825, $result);
+        $this->assertEquals(11021, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_ZeroValue_EqualsZero()
@@ -112,7 +118,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 2, 3);
-        $this->assertEquals(18380, $result);
+        $this->assertEquals(20510, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_TooManyInCollege_EqualsZero()
@@ -126,49 +132,49 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 5, 20);
-        $this->assertEquals(82020, $result);
+        $this->assertEquals(93970, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_AddtlCollege_Calculated()
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, 10, 20);
-        $this->assertEquals(67470, $result);
+        $this->assertEquals(77720, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_IndependentStudentWithDep_Calculated()
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::IndependentStudentWithDependents, MaritalStatus::MarriedRemarried, 10, 20);
-        $this->assertEquals(95140, $result);
+        $this->assertEquals(106190, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_IndependentStudentWithoutDep_Calculated()
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::IndependentStudentWithoutDependents, MaritalStatus::MarriedRemarried, 1, 1);
-        $this->assertEquals(15290, $result);
+        $this->assertEquals(17060, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_SingleIndependentStudentWithoutDep_Calculated()
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::IndependentStudentWithoutDependents, MaritalStatus::SingleSeparatedDivorced, 1, 1);
-        $this->assertEquals(9540, $result);
+        $this->assertEquals(10640, $result);
     }
 
     function testCalculateIncomeProtectionAllowance_SingleIndependentStudentWithoutDepWithSpouseInCollege_Calculated()
     {
         $result = $this->_allowanceCalculator
             ->calculateIncomeProtectionAllowance(EfcCalculationRole::IndependentStudentWithoutDependents, MaritalStatus::MarriedRemarried, 2, 2);
-        $this->assertEquals(9540, $result);
+        $this->assertEquals(10640, $result);
     }
 
 
     function testCalculateIncomeProtectionAllowance_DependentStudent_Calculated()
     {
         $result = $this->_allowanceCalculator->calculateIncomeProtectionAllowance(EfcCalculationRole::DependentStudent, MaritalStatus::MarriedRemarried, 10, 20);
-        $this->assertEquals(6130, $result);
+        $this->assertEquals(6840, $result);
     }
 
     function testCalculateEmploymentExpenseAllowance_TwoWorkingIncomeOverThreshold_Calculated()
@@ -187,7 +193,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->_allowanceCalculator
             ->calculateEmploymentExpenseAllowance(EfcCalculationRole::Parent, MaritalStatus::MarriedRemarried, $parents);
-        $this->assertEquals(3900, $result);
+        $this->assertEquals(4000, $result);
     }
 
     function testCalculateEmploymentExpenseAllowance_TwoWorkingIncomeUnderThreshold_Calculated()
@@ -220,7 +226,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->_allowanceCalculator
             ->calculateEmploymentExpenseAllowance(EfcCalculationRole::Parent, MaritalStatus::SingleSeparatedDivorced, $parents);
-        $this->assertEquals(3900, $result);
+        $this->assertEquals(4000, $result);
     }
 
     function testCalculateEmploymentExpenseAllowance_OneWorking_EqualsZero()
@@ -390,7 +396,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
             45000,
             3000);
 
-        $this->assertEquals(31108, $result);
+        $this->assertEquals(33338, $result);
     }
 
     function testCalculateTotalAllowances_IndependentStudentWithoutDep_Calculated()
@@ -412,7 +418,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
             35000,
             4000);
 
-        $this->assertEquals(17585, $result);
+        $this->assertEquals(19035, $result);
     }
 
     function testCalculateTotalAllowances_IndependentStudentWithDep_Calculated()
@@ -439,7 +445,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
             25000,
             3000);
 
-        $this->assertEquals(30430, $result);
+        $this->assertEquals(33220, $result);
     }
 
 	function testCalculateTotalAllowances_DependentStudent_Calculated()
@@ -461,7 +467,7 @@ class AllowanceCalculatorTest extends \PHPUnit_Framework_TestCase
 		    10000,
 		    1000);
 
-		$this->assertEquals(8395, $result);
+		$this->assertEquals(9205, $result);
 	}
 }
 ?>

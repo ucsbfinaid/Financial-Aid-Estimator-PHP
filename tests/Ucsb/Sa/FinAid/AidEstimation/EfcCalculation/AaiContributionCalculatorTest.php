@@ -29,13 +29,13 @@ class AaiContributionCalculatorTest extends \PHPUnit_Framework_TestCase
     public function testCalculateContributionFromAai_Value_Calculated()
     {
         $result = $this->_aaiContributionCalculator->calculateContributionFromAai(EfcCalculationRole::Parent, 18300);
-        $this->assertEquals(4116, $result);
+        $this->assertEquals(4065, $result);
     }
 
     public function testCalculateContributionFromAai_HighValue_Calculated()
     {
         $result = $this->_aaiContributionCalculator->calculateContributionFromAai(EfcCalculationRole::Parent, 202202);
-        $this->assertEquals(88870, $result);
+        $this->assertEquals(88163, $result);
     }
 
     public function testCalculateContributionFromAai_LowValue_Calculated()

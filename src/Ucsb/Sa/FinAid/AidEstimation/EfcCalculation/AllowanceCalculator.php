@@ -131,23 +131,27 @@ class AllowanceCalculator
 	{
 		$socialSecurityTaxAllowance = 0;
 
-		$socialSecurityTaxIncomeThreshold = $this->_constants->socialSecurityTaxIncomeThreshold;
-		$socialSecurityLowPercent = $this->_constants->socialSecurityLowPercent;
-		$socialSecurityHighPercent = $this->_constants->socialSecurityHighPercent;
-		$socialSecurityHighBase = $this->_constants->socialSecurityHighBase;
+		$socialSecurityTaxBase = 0;
+		$socialSecurityTaxPercentage = 0;
+		$socialSecurityTaxThreshold = 0;
 
-	    if ($workIncome > $socialSecurityTaxIncomeThreshold)
-	    {
-	        $socialSecurityTaxAllowance =
-	        	(($workIncome - $socialSecurityTaxIncomeThreshold) * $socialSecurityHighPercent)
-	        	+ $socialSecurityHighBase;
-	    }
-	    else
-	    {
-	        $socialSecurityTaxAllowance = ($socialSecurityLowPercent * $workIncome);
-	    }
+		$socialSecurityTaxIncomeThresholds = $this->_constants->socialSecurityTaxIncomeThresholds;
+		$socialSecurityTaxBases = $this->_constants->socialSecurityTaxBases;
+		$socialSecurityTaxPercentages = $this->_constants->socialSecurityTaxPercentages;
 
-	    return EfcMathHelper::roundPositive($socialSecurityTaxAllowance);
+		foreach($socialSecurityTaxIncomeThresholds as $index => $threshold)
+		{
+			if ($workIncome > $threshold)
+			{
+				$socialSecurityTaxThreshold = $threshold;
+				$socialSecurityTaxBase = $socialSecurityTaxBases[$index];
+				$socialSecurityTaxPercentage = $socialSecurityTaxPercentages[$index];
+			}
+		}
+
+		$socialSecurityTaxAllowance = (($workIncome - $socialSecurityTaxThreshold) * $socialSecurityTaxPercentage) + $socialSecurityTaxBase;
+
+		return EfcMathHelper::roundPositive($socialSecurityTaxAllowance);
 	}
 
 	/**
