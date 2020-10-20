@@ -62,7 +62,7 @@
         else
         {
             // Calculate
-            $calculator = EfcCalculatorFactory::getEfcCalculator("2021");
+            $calculator = EfcCalculatorFactory::getEfcCalculator("2122");
             $efcProfile = $calculator->getIndependentEfcProfile($args);
 
             // Display Results
