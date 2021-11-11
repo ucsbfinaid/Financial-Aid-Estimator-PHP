@@ -73,7 +73,7 @@
         else
         {
             // Calculate
-            $calculator = EfcCalculatorFactory::getEfcCalculator("2122");
+            $calculator = EfcCalculatorFactory::getEfcCalculator("2223");
             $efcProfile = $calculator->getDependentEfcProfile($args);
 
             // Display Results
