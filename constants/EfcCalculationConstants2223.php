@@ -143,7 +143,7 @@ class EfcCalculationConstants2223
 	public $socialSecurityTaxPercentages = array(0.0765, 0.0145, 0.0235);
 
 	/* 2022-2023: Table 3 */
-	public $socialSecurityTaxBases = array(0, 10534.05, 11437.80);
+	public $socialSecurityTaxBases = array(0, 10534.05, 11437.40);
 
 	/* 2022-2023: Worksheet */
 	public $dependentStudentIncomeProtectionAllowance = 7040;
